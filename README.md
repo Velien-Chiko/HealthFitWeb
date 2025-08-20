@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # HealthFit
 This is HealthFit's repository. This project is coded in ASP .NET.
 
@@ -20,3 +21,6 @@ D:
 ```
 3. **Open project in your IDE**
 - As far as I know, use Visual Studio, Visual Studio to open the project. 
+=======
+# HealthFit
+>>>>>>> 38382f80cb3b927e76a0cb3f4282a2c449451054
