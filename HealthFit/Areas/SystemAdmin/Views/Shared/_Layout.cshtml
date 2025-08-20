@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HealthFit SystemAdmin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-image: url('/images/about-us-page-photo.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: #1e3a8a;
+            color: white;
+            padding: 1rem;
+            flex-shrink: 0;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 0.5rem;
+            margin-bottom: 0.3rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .content {
+            margin-left: 240px;
+            padding: 1.5rem;
+            min-height: 100vh;
+            backdrop-filter: blur(3px);
+        }
+
+        .page-header {
+            padding: 1rem 1.5rem;
+            background-color: rgba(30, 64, 175, 0.85);
+            border-left: 6px solid #0ea5e9;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header-icon {
+            font-size: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 10;
+            padding: 0;
+        }
+        .btn-logout-highlight {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #dc3545 60%, #b52a37 100%);
+            color: #fff !important;
+            border: none;
+            border-radius: 2rem;
+            box-shadow: 0 4px 16px rgba(220,53,69,0.25);
+            padding: 0.75rem 2.2rem;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        }
+        .btn-logout-highlight:hover, .btn-logout-highlight:focus {
+            background: linear-gradient(90deg, #b52a37 60%, #dc3545 100%);
+            color: #fff;
+            box-shadow: 0 6px 24px rgba(220,53,69,0.35);
+            transform: scale(1.06);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar text-center">
+        <h4 class="mb-4">Quản Trị Hệ Thống</h4>
+        <img src="/images/z5619908841873_1c859eff16782f09069986000781c718.jpg" alt="Admin Avatar" class="avatar-img mb-2" />
+        <p><i class="bi bi-person-circle"></i> Nguyễn Hữu An - App Developer</p>
+        <p><i class="bi bi-person-circle"></i> annhhe187219@fpt.edu.vn</p>
+        <hr />
+        
+        <nav>
+            <a asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="SystemAdmin">
+                <i class="bi bi-people-fill me-2"></i>Quản lý người dùng
+            </a>
+            <a asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="Create">
+                <i class="bi bi-person-plus me-2"></i>Thêm người dùng
+            </a>
+            <hr />
+        </nav>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Nút Đăng Xuất nổi bật ở góc phải -->
+        <form asp-area="Store" asp-controller="Account" asp-action="Logout" method="post" class="btn-home">
+            <button type="submit" class="btn btn-logout-highlight">
+                <i class="bi bi-box-arrow-right" style="font-size:1.5rem;vertical-align:middle;"></i> Đăng Xuất
+            </button>
+        </form>
+
+        <!-- Page Header -->
+        <div class="page-header d-flex align-items-center">
+            <i class="bi bi-gear me-2 header-icon"></i>
+            <h2 class="page-title">@ViewData["Title"]</h2>
+        </div>
+
+        <!-- Main Content -->
+        <div class="card">
+            <div class="card-body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

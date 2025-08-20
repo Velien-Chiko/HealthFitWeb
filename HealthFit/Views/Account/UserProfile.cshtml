@@ -1,0 +1,84 @@
+﻿@model HealthFit.Models.ViewModels.UserProfileViewModel
+@{
+    ViewData["Title"] = "User Profile";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="account-container">
+    <div class="account-box">
+        <h2 class="text-center mb-4">Thông tin cá nhân</h2>
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">@TempData["success"]</div>
+        }
+        <form asp-action="UserProfile" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="md-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" readonly />
+            </div>
+            <div class="md-3">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Country" class="form-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="">Chọn giới tính</option>
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                    <option value="Other">Khác</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Age" class="form-label"></label>
+                <input asp-for="Age" class="form-control" type="number" min="1" max="120" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Height" class="form-label"></label>
+                <input asp-for="Height" class="form-control" type="number" step="0.1" min="0" />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Weight" class="form-label"></label>
+                <input asp-for="Weight" class="form-control" type="number" step="0.1" min="0" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <div class="md-3">
+                <label asp-for="Bmi" class="form-label"></label>
+                <input asp-for="Bmi" class="form-control" readonly />
+            </div>
+            <input type="submit" value="Lưu thay đổi" class="btn btn-success w-100 p-2 mt-3" />
+            <div class="text-center mt-2">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Trở lại trang chủ</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

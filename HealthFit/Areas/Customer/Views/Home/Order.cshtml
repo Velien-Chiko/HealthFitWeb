@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "Danh sách đơn hàng";
+    bool hasAccount = ViewBag.HasAccount ?? false;
+}
+
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 ftco-animate">
+
+                <h2 class="mb-4 text-center">Danh sách đơn hàng</h2>
+
+                @if (!hasAccount)
+                {
+                    <div class="alert alert-warning text-center">
+                        Bạn chưa có tài khoản, nên không có lịch sử mua hàng.
+                    </div>
+                }
+                else if (!Model.Any())
+                {
+                    <div class="alert alert-info text-center">
+                        Bạn chưa có lịch sử mua hàng.
+                    </div>
+                }
+                else
+                {
+                    <form method="post" asp-action="Summary">
+                        <div class="cart-list">
+                            <table class="table table-bordered text-center">
+                                <thead class="thead-primary bg-primary text-white">
+                                    <tr>
+                                        <th>Số thứ tự</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int stt = 1;
+                                    }
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a asp-action="OrderDetail" asp-route-id="@order.OrderId" style="display: block; color: inherit; text-decoration: none;">
+                                                    @stt
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a asp-action="OrderDetail" asp-route-id="@order.OrderId" style="display: block; color: inherit; text-decoration: none;">
+                                                    @order.OrderDate?.ToString("dd/MM/yyyy")
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a asp-action="OrderDetail" asp-route-id="@order.OrderId" style="display: block; color: inherit; text-decoration: none;">
+                                                    @order.TotalAmount.ToString("N0") VNĐ
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a asp-action="OrderDetail" asp-route-id="@order.OrderId" style="display: block; color: inherit; text-decoration: none;">
+                                                    @order.Status
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>

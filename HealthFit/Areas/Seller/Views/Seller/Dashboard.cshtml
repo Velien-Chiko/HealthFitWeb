@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Seller Dashboard";
+    Layout = "~/Areas/Seller/Views/Shared/_Layout.cshtml";
+}
+@inject HealthFit.DataAccess.Data.HealthyShopContext _db
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<HealthFit.Models.User> _userManager
+@{
+    var currentUser = await _userManager.GetUserAsync(User);
+}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold display-5 mb-2 text-primary">Seller Dashboard</h2>
+            <p class="text-muted fs-5">Tổng quan hoạt động kinh doanh của bạn</p>
+        </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-box fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title mb-1">Tổng số sản phẩm</h5>
+                    <p class="display-6 fw-bold text-primary mb-0">@ViewBag.TotalProducts</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-shopping-cart fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title mb-1">Tổng số đơn hàng</h5>
+                    <p class="display-6 fw-bold text-success mb-0">@ViewBag.TotalOrders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-money-bill-wave fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="card-title mb-1">Tổng doanh thu</h5>
+                    <p class="display-6 fw-bold text-danger mb-0">@ViewBag.TotalRevenue.ToString("N0") ₫</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 justify-content-center">
+        <div class="col-12 text-center">
+            <a asp-controller="Seller" asp-action="EditProfile" class="btn btn-outline-primary m-2 px-4 py-2 fs-5">Cập nhật thông tin</a>
+            <a asp-controller="Seller" asp-action="ProductList" class="btn btn-outline-success m-2 px-4 py-2 fs-5">Quản lý sản phẩm</a>
+            <a asp-controller="Seller" asp-action="OrderList" class="btn btn-outline-warning m-2 px-4 py-2 fs-5">Quản lý đơn hàng</a>
+        </div>
+    </div>
+</div>
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .display-6 {
+        font-size: 2.5rem;
+    }
+</style> 

@@ -1,0 +1,27 @@
+﻿/* styleofminh.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Hero Section */
+.hero-wrap {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&h=400&fit=crop');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+    .hero-wrap h1 {
+        font-size: 48px;
+        font-weight: 700;
+        font-family: 'Lora', serif;
+    }
+
+/* Thêm các phần khác từ file CSS cũ */

@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HealthFit.Models.DTO.Product.ProductDetailDto
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">Không tìm thấy sản phẩm.</div>
+}
+else
+{
+    <div class="card" style="max-width: 500px; margin: 0 auto;">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-5">Mã sản phẩm</dt>
+                <dd class="col-sm-7">@Model.ProductId</dd>
+
+                <dt class="col-sm-5">Tên sản phẩm</dt>
+                <dd class="col-sm-7">@Model.Name</dd>
+
+                <dt class="col-sm-5">Số lượng tồn kho</dt>
+                <dd class="col-sm-7">@Model.QuantityInStock</dd>
+
+                <dt class="col-sm-5">Số lượng đã bán</dt>
+                <dd class="col-sm-7">@Model.QuantitySold</dd>
+
+                <dt class="col-sm-5">Calo</dt>
+                <dd class="col-sm-7">@Model.Calo</dd>
+
+                <dt class="col-sm-5">Người tạo</dt>
+                <dd class="col-sm-7">@Model.CreatedByName</dd>
+            </dl>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+    </div>
+}

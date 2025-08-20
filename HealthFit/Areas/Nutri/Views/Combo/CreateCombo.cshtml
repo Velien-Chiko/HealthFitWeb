@@ -1,0 +1,81 @@
+﻿@model HealthFit.Models.MealPlanDetail
+@{
+    ViewData["Title"] = "Tạo Combo mới";
+    var products = ViewBag.Products as List<HealthFit.Models.Product>;
+}
+
+<h2>Tạo Combo mới</h2>
+
+<form asp-action="CreateCombo" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label for="bmirange">Chỉ số BMI</label>
+        <select name="bmirange" class="form-control" required>
+            <option value="">-- Chọn mức BMI --</option>
+            <option value="18.5">Dưới 18.5 (Thiếu cân)</option>
+            <option value="18.5 - 24.9">18.5 - 24.9 (Bình thường)</option>
+            <option value="25 - 29.9">25 - 29.9 (Thừa cân)</option>
+            <option value="30 trở lên">30 trở lên (Béo phì)</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="planDescription">Mô tả</label>
+        <input name="planDescription" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="imageFile">Hình ảnh</label>
+        <input name="imageFile" class="form-control" type="file" />
+    </div>
+
+    <h4>Chọn sản phẩm cho combo</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Chọn</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var selectedIds = ViewBag.SelectedProductIds as List<int> ?? new List<int>();
+            }
+
+            @for (int i = 0; i < products.Count; i++)
+            {
+                var product = products[i];
+                var selected = selectedIds.Contains(product.ProductId);
+                var quantity = selected && Model?.MealPlanProductDetails != null
+                ? (Model.MealPlanProductDetails.FirstOrDefault(m => m.ProductId == product.ProductId)?.Quantity ?? 0)
+                : 0;
+
+
+                <tr>
+                    <td>@product.Name</td>
+                    <td>
+                        <input type="checkbox" name="productIds" value="@product.ProductId"
+                               @(selected ? "checked" : "") onchange="toggleQuantity(this, @i)" />
+                    </td>
+                    <td>
+                        <input type="number" name="quantities" value="@quantity"
+                               id="quantity-@i" class="form-control" min="1"
+                               @(selected ? "" : "disabled") />
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Tạo Combo</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+<script>
+    function toggleQuantity(checkbox, productId) {
+        const quantityInput = document.getElementById('quantity-' + productId);
+        quantityInput.disabled = !checkbox.checked;
+        if (!checkbox.checked) quantityInput.value = 0;
+    }
+</script>

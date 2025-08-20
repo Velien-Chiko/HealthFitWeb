@@ -1,0 +1,147 @@
+﻿@model CartItemVM
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<div class="hero-wrap hero-bread" style="background-image: url('@Url.Content("~/images/bg_1.jpg")');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span> <span>Checkout</span></p>
+                <h1 class="mb-0 bread">Checkout</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section">
+    <form method="post" asp-action="Summary" asp-controller="Cart">
+        @Html.AntiForgeryToken()
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 ftco-animate">
+                    <div class="billing-form">
+                        <h3 class="mb-4 billing-heading">Thông tin giao hàng</h3>
+                        <div class="row align-items-end">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="FullName">Họ và tên *</label>
+                                    <input asp-for="Order.FullName" class="form-control" />
+                                    <span asp-validation-for="Order.FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Country">Quốc gia *</label>
+                                    <input asp-for="Order.Country" class="form-control" readonly />
+                                    <input type="hidden" asp-for="Order.Country" value="Việt Nam" />
+
+                                    <span asp-validation-for="Order.Country" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Address">Địa chỉ *</label>
+                                    <input asp-for="Order.Address" class="form-control" />
+                                    <span asp-validation-for="Order.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="City">Thành phố *</label>
+                                    <input asp-for="Order.City" class="form-control" />
+                                    <span asp-validation-for="Order.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="PhoneNumber">Số điện thoại *</label>
+                                    <input asp-for="Order.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="Order.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Email">Email *</label>
+                                    <input asp-for="Order.Email" class="form-control" />
+                                    <span asp-validation-for="Order.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-5">
+                    <div class="row mt-5 pt-3">
+                        <div class="col-md-12 d-flex mb-5">
+                            <div class="cart-detail cart-total p-3 p-md-4">
+                                <h3 class="billing-heading mb-4">Tổng giỏ hàng</h3>
+
+                                @{
+                                    decimal total = 0;
+                                }
+
+                                @if (Model.CartItemList != null && Model.CartItemList.Any())
+                                {
+                                    foreach (var item in Model.CartItemList)
+                                    {
+                                        var subTotal = item.UnitPrice * item.Quantity;
+                                        total += subTotal;
+
+                                        <p class="d-flex justify-content-between">
+                                            <span>@item.Name</span>
+                                            <span>@item.UnitPrice.ToString("N0") VNĐ x @item.Quantity</span>
+                                            <span>@subTotal.ToString("N0") VNĐ</span>
+                                        </p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>Giỏ hàng của bạn đang trống.</p>
+                                }
+
+                                <hr />
+                                <p class="d-flex total-price justify-content-between">
+                                    <span><strong>Tổng cộng</strong></span>
+                                    @if (total > 0)
+                                    {
+                                        <span class="text-success"><strong>@total.ToString("N0") VNĐ</strong></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">0 VNĐ</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="cart-detail p-3 p-md-4">
+                                <h3 class="billing-heading mb-4">Phương thức thanh toán</h3>
+                                @if (total > 0)
+                                {
+                                    <p>
+                                        <button type="submit" class="btn btn-primary py-3 px-4 w-100">
+                                            Thanh toán với VNPAY
+                                        </button>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Giỏ hàng trống, không thể thanh toán.</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

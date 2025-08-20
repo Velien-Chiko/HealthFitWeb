@@ -1,0 +1,51 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Đánh giá sản phẩm của bạn";
+}
+<h2>Đánh giá sản phẩm của bạn</h2>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Khách hàng</th>
+            <th>Điểm</th>
+            <th>Bình luận</th>
+            <th>Ngày</th>
+            <th>Phản hồi của bạn</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var review in Model)
+    {
+        <tr>
+            <td>@review.Product?.Name</td>
+            <td>@review.User?.FullName</td>
+            <td>@review.Rating</td>
+            <td>@review.Comment</td>
+            <td>@review.CreatedDate.ToString("dd/MM/yyyy")</td>
+            <td>
+                @if (string.IsNullOrEmpty((string)review.SellerReply))
+                {
+                    <form asp-action="Reply" method="post">
+                        <input type="hidden" name="reviewId" value="@review.ReviewID" />
+                        <textarea name="reply" class="form-control" required></textarea>
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">Gửi phản hồi</button>
+                    </form>
+                }
+                else
+                {
+                    <div>
+                        <b>@review.SellerReply</b>
+                        <br />
+                        <small>@review.ReplyAt?.ToString("dd/MM/yyyy HH:mm")</small>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table> 

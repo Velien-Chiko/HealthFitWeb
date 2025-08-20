@@ -1,0 +1,263 @@
+[33mcommit 6a4dc2eca3a88402ba664eac2e878f5b066d7b2e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mBlogchange[m[33m)[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Sat Jul 12 22:27:55 2025 +0700
+
+    checkout
+
+[33mcommit f00303b03156864f286174b09446c1581e0302c4[m[33m ([m[1;31morigin/Blogchange[m[33m)[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Sat Jul 12 10:28:04 2025 +0700
+
+    update 12/07 background
+
+[33mcommit 7aabfced11e21bc83f5b55c1a0c3aa521d522639[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Thu Jul 3 16:17:52 2025 +0700
+
+    Update 3/7
+
+[33mcommit c26bcc791df31cc595d8a6994b3e834399e1d695[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Tue Jul 1 13:06:51 2025 +0700
+
+    minh
+
+[33mcommit 2c947b1ed4c21ae7050c099830356cd730e3bae4[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Tue Jun 24 15:03:47 2025 +0700
+
+    fix
+
+[33mcommit 674e61271f150e134d9adfc8345c332e94e3fa33[m
+Merge: b3004cf 16b0ea4
+Author: Lekhacminh0710 <149131303+Lekhacminh0710@users.noreply.github.com>
+Date:   Tue Jun 24 13:34:10 2025 +0700
+
+    Merge pull request #15 from HuyNguyne2004/Minhblog
+    
+    Minhblog oke oke
+
+[33mcommit 16b0ea4c78cdd1491ee815378a59e41e3f5a990a[m[33m ([m[1;31morigin/Minhblog[m[33m)[m
+Merge: 92687e3 b3004cf
+Author: Lekhacminh0710 <149131303+Lekhacminh0710@users.noreply.github.com>
+Date:   Tue Jun 24 13:33:48 2025 +0700
+
+    Merge branch 'main' into Minhblog
+
+[33mcommit b3004cfec380e0a55f58ce8d0b0f4757b1253382[m
+Author: trang <trangnthe181146@fpt.eduvn>
+Date:   Tue Jun 24 08:30:13 2025 +0700
+
+    merge trangnt
+
+[33mcommit 92687e309731aa23916f2a9582e52e3ae4dc7784[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Sun Jun 22 00:21:57 2025 +0700
+
+    update 22/06
+
+[33mcommit 1fa72590829ba0b8898be77c26896bb3dab4f7ab[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 15:41:08 2025 +0700
+
+    huy push
+
+[33mcommit e1c7419d53af04ebc2bbcaaf6711f8d4c9a3ab4b[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 15:21:24 2025 +0700
+
+    fix lỗi
+
+[33mcommit 41966930c0717d304e37933161af254423ac158a[m
+Merge: 3953930 968a06a
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 10:09:39 2025 +0700
+
+    Merge pull request #13 from HuyNguyne2004/Kuro-Nam
+    
+    Merge code Nam-Kuro
+
+[33mcommit 968a06a2b510e4732dacb2284b7d9b5f1ff854c4[m
+Merge: 9fc5bce 3953930
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 10:09:09 2025 +0700
+
+    Merge branch 'main' into Kuro-Nam
+
+[33mcommit 39539301a61832e3c847edeae5a24d0e5c6c4224[m
+Merge: 67fa5e4 312a85c
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 09:34:29 2025 +0700
+
+    Merge pull request #12 from HuyNguyne2004/huy.product
+    
+    Huy merge Manager Chức năng , dao diện
+
+[33mcommit 312a85cf0c4241a39e656c379f464784060639d5[m
+Merge: daa7070 67fa5e4
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 09:30:46 2025 +0700
+
+    Resolve remaining conflicts and clean snapshot
+
+[33mcommit daa70704f06d82c419774df4bf5f16a742bfe76c[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 08:48:38 2025 +0700
+
+    Xóa migration
+
+[33mcommit 9fc5bce7ee4cd73b0bc84b6d94824571c9484d66[m
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Fri Jun 20 08:46:01 2025 +0700
+
+    fix lại chút xíu OTP
+
+[33mcommit a5ac17f1839306dc5acffb677be1b7ab9d8a597f[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 08:44:07 2025 +0700
+
+    Remove ModelSnapshot to resolve merge conflict
+
+[33mcommit 3bacdf44e24ba4da6d35fecf26913bfda2c4c547[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Fri Jun 20 08:14:10 2025 +0700
+
+    Update 20/6
+
+[33mcommit 7dbf61aa1c76efa561068561efc959a2cfe05747[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 20 01:19:30 2025 +0700
+
+    Hoàn thành chức năng cơ bản-Cần cải tiến dao diện
+
+[33mcommit ae88c7aa79bec172c872364215a0aa40b417e985[m
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Thu Jun 19 23:37:46 2025 +0700
+
+    fixotp
+
+[33mcommit 871b952d66d18d892bf2b6b72919aad56175494e[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Tue Jun 17 01:22:51 2025 +0700
+
+    Dao diện MealPlan
+
+[33mcommit 5b536830648a4b0d58bb76f8e44cdc60d4ed20db[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Tue Jun 17 00:07:40 2025 +0700
+
+    update 17/06 : con product chua xong
+
+[33mcommit 976a12aa6fd9551c4b794bfa938b591d3cba3f61[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Mon Jun 16 00:53:01 2025 +0700
+
+    Chia lại DTO , thêm interface và các câu truy vắn mealplan
+
+[33mcommit d1fb6387fd202be28082d0a2810641095717b9a9[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Sat Jun 14 23:02:39 2025 +0700
+
+    huy add service
+
+[33mcommit 394f57cd5839b0266ced1db8a949dfd43f01ae06[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Sat Jun 14 16:41:30 2025 +0700
+
+    Huy-add search by calo
+
+[33mcommit 82fdd85d9b05ddead0061a77819e201638fb6c6d[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Fri Jun 13 00:22:25 2025 +0700
+
+    Huy-Report
+
+[33mcommit b8b8498dd3130dd24c1238e212273128239f25b7[m
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Tue Jun 10 15:27:06 2025 +0700
+
+    pull
+
+[33mcommit 67fa5e4b8467d2c936fa6e5dda5bea3f50c65a1f[m
+Merge: dd8e282 f57cce7
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Tue Jun 10 15:09:55 2025 +0700
+
+    Merge pull request #11 Huy profile merge vào main
+    
+    Huy user.profile
+
+[33mcommit 22c34af5ff2bc3e8785cd57d9740a12aac2d8b6f[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Tue Jun 10 14:38:26 2025 +0700
+
+    update 10/06
+
+[33mcommit dd8e282bccbd428fde1e1e26975823caa343b97b[m
+Merge: 5b8639b 5acb0b5
+Author: Velien <annguoibi2@gmail.com>
+Date:   Mon Jun 9 15:22:22 2025 +0700
+
+    Merge pull request #10 from HuyNguyne2004/Kuro-Nam
+    
+    Check lại lỗi do ai đó để truy xuất admin
+
+[33mcommit 5acb0b55c4b69879190acfd974dd18b6982e3933[m
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Mon Jun 9 15:21:50 2025 +0700
+
+    Check lại lỗi do ai đó để truy xuất admin
+
+[33mcommit 423872e7daec079e26a4fc58373bf7bda87433d2[m
+Author: admin <admin@LAPTOP-KLKVHN43>
+Date:   Mon Jun 9 14:33:00 2025 +0700
+
+    Thêm chức năng Blog: controller, views, models, migration
+
+[33mcommit 5b8639bd5158351bd565c3c256c2668dc3c650ce[m
+Merge: 3a7b526 2376735
+Author: Velien <annguoibi2@gmail.com>
+Date:   Mon Jun 9 14:31:59 2025 +0700
+
+    Merge pull request #9 from HuyNguyne2004/Kuro-Nam
+    
+    Kuro nam
+
+[33mcommit 2376735484ded04e0c0ecf30a0c5ea89a4ce1155[m
+Merge: d4d8031 d6a4a97
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Mon Jun 9 14:29:51 2025 +0700
+
+    Merge branch 'Kuro-Nam' of https://github.com/HuyNguyne2004/HealthFit into Kuro-Nam
+
+[33mcommit d4d803140a22db2747c0d526afbca46afe3df60c[m
+Author: ADMIN <ADMIN@DESKTOP-CSN9LBD>
+Date:   Mon Jun 9 14:27:07 2025 +0700
+
+    Done login register thiếu mỗi OTP với cả fix cái bắt buộc chạy mã OTP
+
+[33mcommit ea0149c21259aa32aaffbcd8da4cbea6262fed02[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Mon Jun 9 13:11:40 2025 +0700
+
+    Dao diện report
+
+[33mcommit 6e108097e24186dafef562fbf520d003b74937da[m
+Author: HuyNguyne2004 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Sun Jun 8 16:04:14 2025 +0700
+
+    Chỉnh database
+
+[33mcommit 3a7b526306a3d797989162eb134b866686feede3[m
+Merge: 99fb87c d6a4a97
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Sat Jun 7 23:16:30 2025 +0700
+
+    Merge pull request #7 from HuyNguyne2004/Kuro-Nam
+    
+    Kuro nam
+
+[33mcommit d6a4a977752b306476aa6184a47c1bdd8d6b341e[m
+Merge: 0ffde50 99fb87c
+Author: HuyNguyen2k4 <165890212+HuyNguyne2004@users.noreply.github.com>
+Date:   Sat Jun 7 23:16:15 2025 

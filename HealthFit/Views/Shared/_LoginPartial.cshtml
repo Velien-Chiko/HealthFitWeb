@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using HealthFit.Models.Models;
+@inject SignInManager<User> SignInManager;
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-center"
+           href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+           style="gap: 0.4rem; padding-top: 1rem; padding-bottom: 0.2rem;">
+            <i class="bi bi-person-circle" style="font-size: 1.3rem; vertical-align: middle;"></i>
+            <span style="font-size: 1rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Account" asp-action="UserProfile">
+                    <i class="bi bi-person me-2"></i> Thông tin cá nhân
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="Store" asp-controller="Account" asp-action="ChangeAccountPassword">
+                    <i class="bi bi-key me-2"></i> Thay đổi mật khẩu
+                </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+                <form asp-area="Store" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                    <button type="submit" class="dropdown-item">
+                        <i class="bi bi-box-arrow-right me-2"></i> Đăng Xuất
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Account" asp-action="Register">Đăng Ký</a>
+    </li>
+}

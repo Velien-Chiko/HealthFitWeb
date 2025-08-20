@@ -1,0 +1,402 @@
+@model HealthFit.Models.Order
+@using HealthFit.Models.Constants
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Areas/Seller/Views/Shared/_Layout.cshtml";
+    // Chuẩn hóa kiểm tra trạng thái: nhận cả giá trị DB (EN) và hằng số (VN)
+    var isPaid = Model.Status == "Approved" || Model.Status == OrderStatusConstants.Confirmed;
+    var isShipping = Model.Status == "Shipped" || Model.Status == OrderStatusConstants.Shipped;
+    var isCompleted = Model.Status == "Completed" || Model.Status == OrderStatusConstants.Delivered;
+    var isCancelled = Model.Status == "Cancelled" || Model.Status == OrderStatusConstants.Cancelled;
+    // Tính tổng tiền hàng chỉ khi trạng thái không phải Đã hủy hoặc Pending
+    bool isValidForTotal = !(Model.Status == "Cancelled" || Model.Status == OrderStatusConstants.Cancelled || Model.Status == "Pending");
+    decimal tongTienHang = 0;
+    decimal tongTienSanPhamLe = 0;
+    decimal tongTienCombo = 0;
+    
+    if (isValidForTotal)
+    {
+        // Tính tổng tiền sản phẩm lẻ
+        if (Model.OrderProductDetails != null && Model.OrderProductDetails.Any())
+        {
+            tongTienSanPhamLe = Model.OrderProductDetails.Sum(p => p.Subtotal);
+        }
+        
+        // Tính tổng tiền combo
+        if (Model.OrderMealPlanDetails != null && Model.OrderMealPlanDetails.Any())
+        {
+            tongTienCombo = Model.OrderMealPlanDetails.Sum(c => c.UnitPrice * c.Quantity);
+        }
+        
+        // Tổng tiền hàng
+        tongTienHang = tongTienSanPhamLe + tongTienCombo;
+    }
+}
+@functions{
+    string GetStatusVN(string status)
+    {
+        return status switch
+        {
+            "Approved" => "Đã thanh toán",
+            "Shipped" => "Đang giao",
+            "Completed" => "Hoàn thành",
+            "Cancelled" => "Đã hủy",
+            _ => status
+        };
+    }
+}
+
+<div class="container mt-5">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    <!-- Navigation Menu for Seller -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 rounded">
+        <div class="container-fluid">
+            <span class="navbar-brand fw-bold">Seller Menu</span>
+            <div class="navbar-nav">
+                <a class="nav-link" asp-controller="Seller" asp-action="Dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" asp-controller="Seller" asp-action="EditProfile">
+                    <i class="fas fa-user-edit"></i> Cập nhật thông tin
+                </a>
+                <a class="nav-link" asp-controller="Seller" asp-action="ProductList">
+                    <i class="fas fa-box"></i> Quản lý sản phẩm
+                </a>
+                <a class="nav-link active" asp-controller="Seller" asp-action="OrderList">
+                    <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shopping-cart"></i> Chi tiết đơn hàng #@Model.OrderId
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Thông tin đơn hàng -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin đơn hàng</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Mã đơn hàng:</strong></td>
+                                    <td>#@Model.OrderId</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngày đặt:</strong></td>
+                                    <td>@Model.OrderDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Trạng thái:</strong></td>
+                                    <td>
+                                        <span class="badge fs-6 @(isPaid ? "bg-info" : isShipping ? "bg-primary" : isCompleted ? "bg-success" : isCancelled ? "bg-danger" : "bg-secondary")">
+                                            @GetStatusVN(Model.Status)
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tổng tiền:</strong></td>
+                                    <td class="fw-bold text-success">@Model.TotalAmount.ToString("N0") ₫</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin khách hàng</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Tên khách hàng:</strong></td>
+                                    <td>@Model.FullName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>@Model.Email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Số điện thoại:</strong></td>
+                                    <td>@Model.PhoneNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Địa chỉ:</strong></td>
+                                    <td>@Model.Address</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Danh sách sản phẩm -->
+                    <h6 class="fw-bold text-primary mb-3">Danh sách sản phẩm</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int stt = 1;
+                                    bool hasItems = false;
+                                    
+                                    // Hiển thị sản phẩm lẻ
+                                    if (Model.OrderProductDetails != null && Model.OrderProductDetails.Any())
+                                    {
+                                        hasItems = true;
+                                        foreach (var detail in Model.OrderProductDetails)
+                                        {
+                                            <tr>
+                                                <td>@(stt++)</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(detail.Product?.ImageUrl))
+                                                    {
+                                                        <img src="@detail.Product.ImageUrl" alt="@detail.Product.Name"
+                                                             style="width: 50px; height: 50px; object-fit: cover;" class="rounded" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                                            <i class="fas fa-image text-muted"></i>
+                                                        </div>
+                                                    }
+                                                </td>
+                                                <td><strong>@detail.Product?.Name</strong></td>
+                                                <td>@detail.UnitPrice.ToString("N0") ₫</td>
+                                                <td>@detail.Quantity</td>
+                                                <td class="fw-bold">@detail.Subtotal.ToString("N0") ₫</td>
+                                            </tr>
+                                        }
+                                    }
+                                    
+                                    // Hiển thị combo
+                                    if (Model.OrderMealPlanDetails != null && Model.OrderMealPlanDetails.Any())
+                                    {
+                                        hasItems = true;
+                                        foreach (var combo in Model.OrderMealPlanDetails)
+                                        {
+                                            <tr>
+                                                <td>@(stt++)</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(combo.MealPlanDetail?.ImageUrl))
+                                                    {
+                                                        <img src="@combo.MealPlanDetail.ImageUrl" alt="@combo.MealPlanDetail.PlanDescription"
+                                                             style="width: 50px; height: 50px; object-fit: cover;" class="rounded" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                                            <i class="fas fa-image text-muted"></i>
+                                                        </div>
+                                                    }
+                                                </td>
+                                                <td><strong>Combo: @combo.MealPlanDetail?.PlanDescription</strong></td>
+                                                <td>@combo.UnitPrice.ToString("N0") ₫</td>
+                                                <td>@combo.Quantity</td>
+                                                <td class="fw-bold">@((combo.UnitPrice * combo.Quantity).ToString("N0")) ₫</td>
+                                            </tr>
+                                        }
+                                    }
+                                    
+                                    // Hiển thị thông báo nếu không có sản phẩm nào
+                                    if (!hasItems)
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">
+                                                Không có sản phẩm nào trong đơn hàng
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @* Hiển thị danh sách combo (Meal Plan) nếu có *@
+                    @if (Model.OrderMealPlanDetails != null && Model.OrderMealPlanDetails.Any())
+                    {
+                        <h6 class="fw-bold text-primary mb-3">Danh sách combo (Meal Plan)</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên combo</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int sttCombo = 1;
+                                        foreach (var combo in Model.OrderMealPlanDetails)
+                                        {
+                                            <tr>
+                                                <td>@(sttCombo++)</td>
+                                                <td>@combo.MealPlanDetail?.PlanDescription</td>
+                                                <td>@combo.UnitPrice.ToString("N0") ₫</td>
+                                                <td>@combo.Quantity</td>
+                                                <td class="fw-bold">@((combo.UnitPrice * combo.Quantity).ToString("N0")) ₫</td>
+                                            </tr>
+                                            // Hiển thị sản phẩm con của combo
+                                            if (combo.MealPlanDetail?.MealPlanProductDetails != null && combo.MealPlanDetail.MealPlanProductDetails.Any())
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td colspan="4">
+                                                        <div class="ms-3">
+                                                            <strong>Sản phẩm trong combo:</strong>
+                                                            <ul class="mb-0">
+                                                                @foreach (var item in combo.MealPlanDetail.MealPlanProductDetails)
+                                                                {
+                                                                    <li>
+                                                                        @item.Product?.Name (x@(item.Quantity * combo.Quantity))
+                                                                        - @item.Product?.Price.ToString("N0") ₫/sp
+                                                                        = <span class="fw-bold">@(((item.Product?.Price ?? 0) * item.Quantity * combo.Quantity).ToString("N0")) ₫</span>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    <!-- Thêm hiển thị tổng tiền hàng -->
+                    @if (isValidForTotal)
+                    {
+                        <div class="alert alert-info mt-3">
+                            <h6 class="fw-bold mb-2">Tổng tiền hàng (không tính đơn đã hủy hoặc pending):</h6>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Tổng tiền sản phẩm lẻ:</strong>
+                                    <span class="fw-bold text-primary">@tongTienSanPhamLe.ToString("N0") ₫</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Tổng tiền combo:</strong>
+                                    <span class="fw-bold text-success">@tongTienCombo.ToString("N0") ₫</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Tổng tiền đơn hàng:</strong>
+                                    <span class="fw-bold text-danger fs-5">@tongTienHang.ToString("N0") ₫</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Cập nhật trạng thái -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0 fw-bold text-primary">
+                                <i class="fas fa-cogs"></i> Cập nhật trạng thái đơn hàng
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Trạng thái hiện tại:</label>
+                                    <div>
+                                        <span class="badge fs-6 @(isPaid ? "bg-info" : isShipping ? "bg-primary" : isCompleted ? "bg-success" : isCancelled ? "bg-danger" : "bg-secondary")">
+                                            @GetStatusVN(Model.Status)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    @if (isPaid || isShipping)
+                                    {
+                                        <form asp-action="UpdateOrderStatus" method="post" class="d-flex gap-2">
+                                            <input type="hidden" name="orderId" value="@Model.OrderId" />
+                                            <select name="status" class="form-select" style="max-width: 200px;">
+                                                @if (isPaid)
+                                                {
+                                                    <option value="Shipped">Đang giao</option>
+                                                    <option value="Completed">Hoàn thành</option>
+                                                    <option value="Cancelled">Đã hủy</option>
+                                                }
+                                                else if (isShipping)
+                                                {
+                                                    <option value="Completed">Hoàn thành</option>
+                                                    <option value="Cancelled">Đã hủy</option>
+                                                }
+                                            </select>
+                                            <button type="submit" class="btn btn-primary" onclick="return confirm('Bạn có chắc chắn muốn cập nhật trạng thái?')">
+                                                <i class="fas fa-save"></i> Cập nhật
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (isCompleted || isCancelled)
+                                    {
+                                        <div class="alert alert-info mb-0">
+                                            Đơn hàng đã @GetStatusVN(Model.Status), không thể chỉnh sửa trạng thái nữa.
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-warning mb-0">
+                                            Chỉ có thể cập nhật trạng thái khi đơn hàng đã thanh toán hoặc đang giao.
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thao tác -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-controller="Seller" asp-action="OrderList" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                        </a>
+                        <div class="d-flex gap-2">
+                            @if (Model.Status == OrderStatusConstants.Confirmed)
+                            {
+                                <form asp-action="ShipOrder" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn cập nhật trạng thái giao hàng?')">
+                                    <input type="hidden" name="orderId" value="@Model.OrderId" />
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-shipping-fast"></i> Giao hàng
+                                    </button>
+                                </form>
+                            }
+                            else if (Model.Status == OrderStatusConstants.Shipped)
+                            {
+                                <form asp-action="DeliverOrder" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xác nhận đã giao hàng?')">
+                                    <input type="hidden" name="orderId" value="@Model.OrderId" />
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check-double"></i> Xác nhận đã giao
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 

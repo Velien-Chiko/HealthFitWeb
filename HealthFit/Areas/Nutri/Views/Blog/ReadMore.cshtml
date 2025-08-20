@@ -1,0 +1,92 @@
+﻿@model HealthFit.Models.Blog
+@{
+    Layout = null;
+}
+
+@if (Model == null)
+{
+    <p style="color:red">Model is null!</p>
+}
+else
+{
+    <p style="color:green">Model loaded: @Model.Title</p>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Vegefoods - Blog Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Đã sửa lỗi: dùng Url.Content để render đường dẫn -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="@Url.Content("~/css/style.css")" rel="stylesheet" />
+</head>
+<body class="goto-here">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ftco-navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">Vegefoods</a>
+        </div>
+    </nav>
+
+    <div class="hero-wrap hero-bread" style="background-image: url('@Url.Content("~/images/bg_1.jpg")');">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs"><span><a href="/">Home</a></span> <span>Blog</span></p>
+                    <h1 class="mb-0 bread">Blog Detail</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    @if (Model == null)
+                    {
+                        <p class="text-danger">Không tìm thấy blog.</p>
+                    }
+                    else
+                    {
+                        <h2 class="mb-3">@Model.Title</h2>
+                        <p class="text-muted">By <strong>@(Model.User?.FullName ?? "Anonymous")</strong> | @Model.CreatedDate?.ToString("dd/MM/yyyy")</p>
+
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <p><img src="@Url.Content(Model.ImageUrl)" class="img-fluid" alt="Blog image" /></p>
+                        }
+
+                        <p>@Html.Raw(Model.Content)</p>
+
+                        @if (Model.Bmirange.HasValue)
+                        {
+                            <p><strong>BMI:</strong> @Model.Bmirange.Value.ToString("0.0")</p>
+                        }
+
+                    }
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box">
+                        <form asp-controller="Blog" asp-action="Index" method="get" class="search-form">
+                            <div class="form-group">
+                                <input type="text" name="searchString" class="form-control" placeholder="Search..." />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="@Url.Content("~/js/main.js")"></script> -->
+</body>
+</html>

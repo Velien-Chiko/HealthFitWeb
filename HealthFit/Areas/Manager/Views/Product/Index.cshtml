@@ -1,0 +1,663 @@
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using HealthFit.Models.Constants
+
+@model HealthFit.Models.ViewModels.ProductSearchViewModel
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 15px;
+    }
+
+    .search-form {
+        background: #f8f9fc;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        margin-bottom: 2rem;
+    }
+
+        .search-form .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .search-form .form-control {
+            border-radius: 10px;
+            border: 1px solid #d1d3e2;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+            .search-form .form-control:focus {
+                border-color: #4e73df;
+                box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            }
+
+        .search-form .btn {
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+            .search-form .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+    .product-table {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+
+        .product-table .table th {
+            background: #f8f9fc;
+            border: none;
+            font-weight: 600;
+            color: #5a5c69;
+            padding: 1rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .product-table .table td {
+            padding: 1rem;
+            border: none;
+            border-bottom: 1px solid #e3e6f0;
+            vertical-align: middle;
+        }
+
+        .product-table .table tbody tr:hover {
+            background-color: #f8f9fc;
+            transform: scale(1.001);
+            transition: all 0.3s ease;
+        }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #e3e6f0;
+        transition: all 0.3s ease;
+    }
+
+        .product-image:hover {
+            transform: scale(1.1);
+            border-color: #4e73df;
+        }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .action-buttons .btn {
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .action-buttons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+    .stats-card {
+        background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+
+        .stats-card .table {
+            color: white;
+            margin-bottom: 0;
+        }
+
+            .stats-card .table th,
+            .stats-card .table td {
+                border-color: rgba(255,255,255,0.2);
+                padding: 1rem;
+            }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+        .pagination .page-link {
+            border-radius: 10px;
+            margin: 0 0.25rem;
+            color: #4e73df;
+            font-weight: 500;
+            border: 1px solid #d1d3e2;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            border-color: #4e73df;
+            transform: scale(1.05);
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: end;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #5a5c69;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+    .card-header-custom {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+
+        .no-data i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+  
+
+    {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        min-width: 100%;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+        .action-buttons .btn {
+            margin: 0;
+        }
+    /* FIX: Hiển thị chữ và nền trong select và input */
+    .search-form select,
+    .search-form input[type="text"],
+    .search-form input[type="search"] {
+        background-color: #fff !important; /* Nền trắng */
+        color: #212529 !important; /* Chữ đen rõ */
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+
+        /* Khi focus vào input/select */
+        .search-form select:focus,
+        .search-form input:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            outline: none;
+        }
+
+    /* Option trong select cũng cần sáng */
+    .search-form option {
+        background-color: #fff;
+        color: #212529;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .action-buttons .btn {
+        border-radius: 20px !important;
+        box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+        padding: 0.5rem 1.2rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border: none;
+        transition: all 0.25s cubic-bezier(.4,0,.2,1);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .action-buttons .btn-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        color: #fff;
+    }
+    .action-buttons .btn-primary:hover {
+        background: linear-gradient(135deg, #224abe 0%, #4e73df 100%);
+        transform: translateY(-2px) scale(1.07);
+        box-shadow: 0 6px 18px rgba(78,115,223,0.18);
+    }
+    .action-buttons .btn-success {
+        background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+        color: #fff;
+    }
+    .action-buttons .btn-success:hover {
+        background: linear-gradient(135deg, #13855c 0%, #1cc88a 100%);
+        transform: translateY(-2px) scale(1.07);
+        box-shadow: 0 6px 18px rgba(28,200,138,0.18);
+    }
+    .action-buttons .btn-danger {
+        background: linear-gradient(135deg, #e74a3b 0%, #c0392b 100%);
+        color: #fff;
+    }
+    .action-buttons .btn-danger:hover {
+        background: linear-gradient(135deg, #c0392b 0%, #e74a3b 100%);
+        transform: translateY(-2px) scale(1.07);
+        box-shadow: 0 6px 18px rgba(231,74,59,0.18);
+    }
+    .action-buttons .btn-info {
+        background: linear-gradient(135deg, #36b9cc 0%, #2980b9 100%);
+        color: #fff;
+    }
+    .action-buttons .btn-info:hover {
+        background: linear-gradient(135deg, #2980b9 0%, #36b9cc 100%);
+        transform: translateY(-2px) scale(1.07);
+        box-shadow: 0 6px 18px rgba(54,185,204,0.18);
+    }
+    .action-buttons .btn i {
+        font-size: 1.1em;
+    }
+
+    /* ✅ Reset dropdown về dạng cơ bản mà vẫn đẹp */
+    .search-form select.form-control,
+    .search-form option {
+        background-color: #fff !important;
+        color: #212529 !important;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        appearance: none;
+    }
+
+        /* Khi focus vào select: viền xanh nhẹ, không quá sáng */
+        .search-form select.form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            outline: none;
+        }
+
+</style>
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <h1 class="mb-0">
+            <i class="fas fa-box-open mr-3"></i>
+            Quản lý sản phẩm
+        </h1>
+        <p class="mb-0 mt-2 opacity-75">Quản lý và theo dõi tất cả sản phẩm trong hệ thống</p>
+    </div>
+
+    <partial name="_Notification" />
+
+    <!-- Search Form -->
+    <div class="search-form">
+        <form asp-area="Manager" asp-controller="Product" asp-action="Index" method="get">
+            <div class="row">
+                <!-- Tìm kiếm -->
+                <div class="col-md-4 mb-3">
+                    <label class="font-weight-bold">Từ khoá</label>
+                    <input asp-for="SearchString" class="form-control"  placeholder="Nhập tên sản phẩm..." />
+                </div>
+
+                <!-- Trạng thái -->
+                <div class="col-md-4 mb-3">
+                    <label class="font-weight-bold">Trạng thái</label>
+                    <select name="showHidden" class="form-control">
+                        <option value="" selected="@(string.IsNullOrEmpty(Model.ShowHidden))">Tất cả</option>
+                        <option value="Pending" selected="@(Model.ShowHidden == "Pending")">Đang chờ duyệt</option>
+                        <option value="Approved" selected="@(Model.ShowHidden == "Approved")">Đã duyệt</option>
+                        <option value="Rejected" selected="@(Model.ShowHidden == "Rejected")">Bị từ chối</option>
+                    </select>
+                </div>
+
+                <!-- Danh mục -->
+                <div class="col-md-4 mb-3">
+                    <label class="font-weight-bold">Danh mục</label>
+                    @if (Model.Categories == null || !Model.Categories.Any())
+                    {
+                        <div class="alert alert-warning mb-0 p-2">
+                            <i class="fas fa-exclamation-triangle"></i> Không có danh mục nào
+                        </div>
+                    }
+                    else
+                    {
+                        <select name="categoryId" class="form-control">
+                            <option value="" selected="@(Model.CategoryId == null)">Tất cả</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.CategoryId" selected="@(Model.CategoryId == category.CategoryId)">
+                                    @category.CategoryName
+                                </option>
+                            }
+                        </select>
+                    }
+                </div>
+
+                <!-- Mức calo -->
+                <div class="col-md-4 mb-3">
+                    <label class="font-weight-bold">Mức calo</label>
+                    <select name="caloRange" class="form-control">
+                        <option value="" selected="@(Model.CaloRange == null)">Tất cả</option>
+                        <option value="0-100" selected="@(Model.CaloRange == "0-100")">0-100</option>
+                        <option value="100-200" selected="@(Model.CaloRange == "100-200")">100-200</option>
+                        <option value="200-300" selected="@(Model.CaloRange == "200-300")">200-300</option>
+                        <option value="300-400" selected="@(Model.CaloRange == "300-400")">300-400</option>
+                        <option value="400-500" selected="@(Model.CaloRange == "400-500")">400-500</option>
+                        <option value="500+" selected="@(Model.CaloRange == "500+")">Trên 500</option>
+                    </select>
+                </div>
+
+                <!-- Giá tiền -->
+                <div class="col-md-4 mb-3">
+                    <label class="font-weight-bold">Giá tiền</label>
+                    <select name="priceRange" class="form-control">
+                        <option value="" selected="@(Model.PriceRange == null)">Tất cả</option>
+                        <option value="0-20000" selected="@(Model.PriceRange == "0-20000")">0-20k</option>
+                        <option value="20000-40000" selected="@(Model.PriceRange == "20000-40000")">20k – 40k</option>
+                        <option value="40000-60000" selected="@(Model.PriceRange == "40000-60000")">40k – 60k</option>
+                        <option value="60000+" selected="@(Model.PriceRange == "60000+")">Trên 60k</option>
+                    </select>
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="col-md-4 mb-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary mr-2">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <a asp-action="ExportToExcel"
+                       asp-controller="Product"
+                       asp-area="Manager"
+                       asp-route-searchString="@Model.SearchString"
+                       asp-route-showHidden="@Model.ShowHidden"
+                       asp-route-caloRange="@Model.CaloRange"
+                       asp-route-priceRange="@Model.PriceRange"
+                       asp-route-CategoryId="@Model.CategoryId"
+                       class="btn btn-success">
+                        <i class="fas fa-file-excel"></i> Xuất Excel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Product Table -->
+    <div class="product-table">
+        <div class="card-header-custom">
+            @if (Model.ShowHidden == "Active")
+            {
+                <h5 class="mb-0">
+                    <i class="fas fa-eye-slash mr-2"></i>
+                    Danh sách sản phẩm ẩn
+                </h5>
+            }
+            else if (Model.ShowHidden == "Inactive")
+            {
+                <h5 class="mb-0">
+                    <i class="fas fa-eye mr-2"></i>
+                    Danh sách sản phẩm kích hoạt
+                </h5>
+            }
+            else
+            {
+                <h5 class="mb-0">
+                    <i class="fas fa-list mr-2"></i>
+                    Danh sách tất cả sản phẩm
+                </h5>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Mô tả</th>
+                        <th>Giá tiền</th>
+                        <th>Hình ảnh</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ProductList != null && Model.ProductList.Any())
+                    {
+                        @foreach (var item in Model.ProductList)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge badge-secondary">#@item.ProductId</span>
+                                </td>
+                                <td>
+                                    <strong>@item.Name</strong>
+                                </td>
+                                <td>
+                                    <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
+                                        @Html.Raw(item.Description)
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-success font-weight-bold">
+                                        @item.Price.ToString("N0") ₫
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        var fullImageUrl = item.ImageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                                        ? item.ImageUrl
+                                        : $"{Context.Request.Scheme}://{Context.Request.Host}{item.ImageUrl}";
+
+                                        <img src="@fullImageUrl"
+                                             alt="@item.Name"
+                                             class="product-image" />
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center text-muted p-3 border rounded">
+                                            <i class="fas fa-image fa-2x"></i>
+                                            <br><small>Chưa có ảnh</small>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsActive == "Approved")
+                                    {
+                                        <span class="status-badge badge-success">
+                                            <i class="fas fa-check-circle"></i> Đã duyệt
+                                        </span>
+                                    }
+                                    else if (item.IsActive == "Pending")
+                                    {
+                                        <span class="status-badge badge-warning">
+                                            <i class="fas fa-hourglass-half"></i> Đang chờ duyệt
+                                        </span>
+                                    }
+                                    else if (item.IsActive == "Rejected")
+                                    {
+                                        <span class="status-badge badge-danger">
+                                            <i class="fas fa-times-circle"></i> Bị từ chối
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge badge-secondary">
+                                            <i class="fas fa-question-circle"></i> Trạng thái không xác định
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons d-flex gap-1">
+                                        <!-- Nút sửa -->
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.ProductId"
+                                           asp-controller="Product"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </a>
+
+                                        @if (item.IsActive == "Pending")
+                                        {
+                                            <a class="btn btn-success btn-sm"
+                                               asp-action="ChangeStatus"
+                                               asp-controller="Product"
+                                               asp-route-id="@item.ProductId"
+                                               asp-route-newStatus="Approved"
+                                               onclick='return confirm("Bạn có chắc muốn duyệt sản phẩm này không?");'>
+                                                <i class="fas fa-check"></i> Duyệt
+                                            </a>
+
+                                            <a class="btn btn-danger btn-sm"
+                                               asp-action="ChangeStatus"
+                                               asp-controller="Product"
+                                               asp-route-id="@item.ProductId"
+                                               asp-route-newStatus="Rejected"
+                                               onclick='return confirm("Bạn có chắc muốn từ chối sản phẩm này không?");'>
+                                                <i class="fas fa-times"></i> Từ chối
+                                            </a>
+                                        }
+
+                                        <!-- Nút chi tiết -->
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.ProductId"
+                                           asp-controller="Product"
+                                           class="btn btn-info btn-sm">
+                                            <i class="fas fa-info-circle"></i> Chi tiết
+                                        </a>   
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="no-data">
+                                <i class="fas fa-box-open"></i>
+                                <h5>Không có sản phẩm nào</h5>
+                                <p>Không tìm thấy sản phẩm nào phù hợp với điều kiện tìm kiếm.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="stats-card">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <i class="fas fa-hourglass-half fa-2x mb-2" style="color: #f6c23e;"></i>
+                    <h3 class="mb-0">@Model.PendingCount</h3>
+                    <p class="mb-0">Đang chờ duyệt</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <i class="fas fa-check-circle fa-2x mb-2" style="color: #1cc88a;"></i>
+                    <h3 class="mb-0">@Model.ApprovedCount</h3>
+                    <p class="mb-0">Đã duyệt</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <i class="fas fa-times-circle fa-2x mb-2" style="color: #e74a3b;"></i>
+                    <h3 class="mb-0">@Model.RejectedCount</h3>
+                    <p class="mb-0">Bị từ chối</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Pagination -->
+    @if (Model.ProductList != null && Model.ProductList.PageCount > 1)
+    {
+        <nav aria-label="Page navigation">
+            @Html.PagedListPager(
+                     Model.ProductList,
+                     page => Url.Action("Index", new
+                     {
+                         page,
+                         searchString = Model.SearchString,
+                         showHidden = Model.ShowHidden,
+                         caloRange = Model.CaloRange,
+                         priceRange = Model.PriceRange,
+                         CategoryId = Model.CategoryId
+                     }),
+                     new PagedListRenderOptions
+        {
+            MaximumPageNumbersToDisplay = 5,
+            DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+            DisplayLinkToLastPage = PagedListDisplayMode.Never,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+        }
+                     )
+        </nav>
+    }
+</div>

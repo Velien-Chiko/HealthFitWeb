@@ -1,0 +1,211 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using HealthFit.Models.ViewModels
+@model ProductAndMealPlanViewModel
+
+@{
+    ViewData["Title"] = "Store Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="~/css/magnific-popup.css" />
+    <link rel="stylesheet" href="~/css/aos.css" />
+    <link rel="stylesheet" href="~/css/ionicons.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css" />
+    <link rel="stylesheet" href="~/css/flaticon.css" />
+    <link rel="stylesheet" href="~/css/icomoon.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
+<body class="goto-here">
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-10 text-center">
+                    <ul class="product-category">
+                        <li>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Store" ? "active" : "")"
+                               asp-area="Store" asp-controller="Store" asp-action="Index">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+                               asp-area="Store" asp-controller="Product" asp-action="Index">
+                                Món ăn
+                            </a>
+                        </li>
+                        <li>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MealPlan" ? "active" : "")"
+                               asp-area="Store" asp-controller="MealPlan" asp-action="Index">
+                                Thực đơn
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            @* Đã xóa phần BMI Calculator theo yêu cầu *@
+            <div class="row">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="product">
+                            <a asp-controller="Product"
+                               asp-action="ProductSingle"
+                               asp-route-id="@product.ProductId"
+                               class="img-prod">
+                                <img class="img-fluid"
+                                     src="@(product.ImageUrl ?? "images/default-product.jpg")"
+                                     alt="@product.Name"
+                                     style="height:200px;object-fit:cover;" />
+                            </a>
+                            <div class="text py-3 pb-4 px-3 text-center">
+                                <h3>
+                                    <a asp-controller="Product"
+                                       asp-action="ProductSingle"
+                                       asp-route-id="@product.ProductId">
+                                        @product.Name
+                                    </a>
+                                </h3>
+                                <div class="d-flex">
+                                    <div class="pricing">
+                                        <p class="price text-success fw-bold">
+                                            <span>₫@product.Price.ToString("#,0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".")</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bottom-area d-flex px-3">
+                                    <div class="m-auto d-flex">
+                                        <form id="form-@product.ProductId" asp-area="Customer" asp-controller="Home" asp-action="AddToCart" method="post">
+                                            <input type="hidden" name="productId" value="@product.ProductId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                        </form>
+                                        <a href="javascript:void(0);" onclick="document.getElementById('form-@product.ProductId').submit();"
+                                           class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                            <i class="ion-ios-menu"></i>
+                                        </a>
+                                        <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                            <span><i class="ion-ios-cart"></i></span>
+                                        </a>
+                                        <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                                            <span><i class="ion-ios-heart"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row justify-content-center mt-5 mb-5">
+                <div class="col-md-10 text-center">
+                    <h2 class="mb-4">Danh sách Combo Bữa ăn (Meal Plans)</h2>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var mealPlan in Model.MealPlans.Where(mp => mp.IsApproved == "Approved"))
+                {
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="product">
+                            <a asp-area="Store"
+                               asp-controller="MealPlan"
+                               asp-action="MealPlanSingle"
+                               asp-route-id="@mealPlan.MealPlanDetailId"
+                               class="img-prod">
+                                <img class="img-fluid"
+                                     src="@(mealPlan.ImageUrl ?? "images/default-product.jpg")"
+                                     alt="@mealPlan.PlanDescription"
+                                     style="height:200px;object-fit:cover;" />
+                            </a>
+                            <div class="text py-3 pb-4 px-3 text-center">
+                                <h3>
+                                    <a asp-area="Store"
+                                       asp-controller="MealPlan"
+                                       asp-action="MealPlanSingle"
+                                       asp-route-id="@mealPlan.MealPlanDetailId">
+                                        @mealPlan.PlanDescription
+                                    </a>
+                                </h3>
+                                <div class="d-flex">
+                                    <div class="pricing">
+                                        <p class="price text-success fw-bold">
+                                            <span>₫@mealPlan.Price.ToString("#,0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".")</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bottom-area d-flex px-3">
+                                    <div class="m-auto d-flex">
+                                        <form id="form-@mealPlan.MealPlanDetailId"
+                                              asp-action="AddMealPlanToCart"
+                                              method="post"
+                                              asp-controller="Home"
+                                              asp-area="Customer">
+                                            <input type="hidden" name="items[0].MealPlanDetailId" value="@mealPlan.MealPlanDetailId" />
+                                            <input type="hidden" name="items[0].Bmirange" value="@mealPlan.Bmirange" />
+                                            <input type="hidden" name="items[0].PlanDescription" value="@mealPlan.PlanDescription" />
+                                            <input type="hidden" name="items[0].IsApproved" value="@mealPlan.IsApproved" />
+                                            <input type="hidden" name="items[0].Price" value="@mealPlan.Price" />
+                                            <input type="hidden" name="items[0].ImageUrl" value="@mealPlan.ImageUrl" />
+
+                                            @for (int j = 0; j < mealPlan.MealPlanProductDetails.Count; j++)
+                                            {
+                                                var product = mealPlan.MealPlanProductDetails.ElementAt(j);
+                                                <input type="hidden" name="items[0].MealPlanProductDetails[@j].ProductId" value="@product.ProductId" />
+                                                <input type="hidden" name="items[0].MealPlanProductDetails[@j].Quantity" value="@product.Quantity" />
+                                            }
+                                        </form>
+                                        <a href="javascript:void(0);"
+                                           onclick="document.getElementById('form-@mealPlan.MealPlanDetailId').submit();"
+                                           class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                            <i class="ion-ios-menu"></i>
+                                        </a>
+                                        <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                            <span><i class="ion-ios-cart"></i></span>
+                                        </a>
+                                        <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                                            <span><i class="ion-ios-heart"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.easing.1.3.js"></script>
+    <script src="~/js/jquery.waypoints.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/aos.js"></script>
+    <script src="~/js/jquery.animateNumber.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="~/js/google-map.js"></script>
+    <script src="~/js/main.js"></script>
+</body>
+</html>

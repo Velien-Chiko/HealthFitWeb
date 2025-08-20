@@ -1,0 +1,85 @@
+﻿@using HealthFit.Models.ViewModels;
+@model LoginViewModel;
+
+@{
+	ViewData["Title"] = "Login";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<div class="account-container">
+	<div class="account-box">
+		<h2 class=" text-center mb-4">Đăng Nhập</h2>
+		<form action="/Account/Login" method="post" >
+
+			<div asp-validation-summary="ModelOnly" class=" text-danger">
+			</div>
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
+            }
+		    <div class="md-3">
+				<label asp-for="Email" class="form-label"></label>
+				<input asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="Password" class="form-label"></label>
+				<div class="password-wrapper" style="position:relative;">
+					<input asp-for="Password" class="form-control" id="Password" />
+					<span class="toggle-password animation-eyes" toggle="#Password">
+						<i class="fa fa-eye"></i>
+					</span>
+				</div>
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="float-end">
+				<a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">
+					Quên Mật Khẩu ?
+				</a>
+			</div>
+			<div class="md-3">
+				<div class="form-check">
+					<input asp-for="RememberMe" class="form-check-input" />
+					@Html.DisplayNameFor(a => a.RememberMe)
+					
+				</div>
+			</div>
+
+			<div class="md-3">
+				<div class="g-recaptcha" data-sitekey="6LfwZVYrAAAAABwlHiY_zKxExQ3Ra54w4o1AxAfJ"></div>
+			</div>
+
+			<input type="submit" value="Đăng Nhập" class="btn btn-succes w-100 p-2 login-center" />
+			<a asp-controller="Account" asp-action="LoginGoogle" class="btn btn-danger w-100 p-2 mt-3">
+				Đăng nhập với Google
+			</a>
+
+				<p class=" text-center mt-2">
+				Không có mật khẩu ? <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Đăng Ký</a>
+				</p>
+				<div class="text-center">
+					<a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Trở Lại Trang Chủ</a>
+				</div>
+
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/account.js"></script>
+	<script>
+		document.querySelector('form').addEventListener('submit', function(e) {
+			if (!grecaptcha.getResponse()) {
+				e.preventDefault();
+				alert('Vui lòng xác nhận CAPTCHA!');
+			}
+		});
+	</script>
+
+
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

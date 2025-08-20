@@ -1,0 +1,94 @@
+﻿@model OrderDetailViewModel
+
+@{
+    ViewData["Title"] = $"Chi tiết đơn hàng #{Model.OrderId}";
+}
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 ftco-animate">
+                <h2>Chi tiết đơn hàng </h2>
+
+                <p><strong>Ngày đặt:</strong> @Model.OrderDate?.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Khách hàng:</strong> @Model.FullName</p>
+                <p><strong>Địa chỉ:</strong> @Model.Address, @Model.City, @Model.Country</p>
+                <p><strong>Số điện thoại:</strong> @Model.PhoneNumber</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Trạng thái thanh toán:</strong> @Model.PaymentStatus</p>
+                <p><strong>Trạng thái đơn hàng:</strong> @Model.Status</p>
+
+                <hr />
+
+                <h3>Sản phẩm trong đơn hàng</h3>
+                @if (Model.OrderProducts != null && Model.OrderProducts.Any())
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá (VNĐ)</th>
+                                <th>Thành tiền (VNĐ)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderProducts)
+                            {
+                                <tr>
+                                    <td>@item.ProductName</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-right">@item.UnitPrice.ToString("N0")</td>
+                                    <td class="text-right">@item.SubTotal.ToString("N0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>Không có sản phẩm lẻ trong đơn hàng này.</p>
+                }
+
+                <hr />
+
+                <h3>Combo trong đơn hàng</h3>
+                @if (Model.OrderMealPlans != null && Model.OrderMealPlans.Any())
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tên combo</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá (VNĐ)</th>
+                                <th>Thành tiền (VNĐ)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderMealPlans)
+                            {
+                                <tr>
+                                    <td>@item.MealPlanName</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-right">@item.UnitPrice.ToString("N0")</td>
+                                    <td class="text-right">@item.SubTotal.ToString("N0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>Không có combo trong đơn hàng này.</p>
+                }
+
+                <hr />
+
+                <h4 class="text-right">Tổng tiền đơn hàng: <strong>@Model.TotalAmount.ToString("N0") VNĐ</strong></h4>
+
+                <p>
+                    <a asp-action="Order" asp-controller="Home" class="btn btn-primary">Quay lại danh sách đơn hàng</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

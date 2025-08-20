@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="X.PagedList" Version="10.5.7" />
+		<PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
+	</ItemGroup>
+
+<ItemGroup>
+  <Compile Remove="Container\**" />
+  <Content Remove="Container\**" />
+  <EmbeddedResource Remove="Container\**" />
+  <None Remove="Container\**" />
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="DocuSign.eSign.dll" Version="8.0.0" />
+  <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
+  <PackageReference Include="MailKit" Version="4.12.1" />
+  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.0" />
+  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
+  <PackageReference Include="VNPAY.NET" Version="8.5.0" />
+</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\HealthFit.DataAccess\HealthFit.DataAccess.csproj" />
+		<ProjectReference Include="..\HealthFit.Models\HealthFit.Models.csproj" />
+		<ProjectReference Include="..\HealthFit.Utility\HealthFit.Utility.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Services\DTOs\" />
+		<Folder Include="wwwroot\fonts\" />
+	</ItemGroup>
+
+
+
+</Project>

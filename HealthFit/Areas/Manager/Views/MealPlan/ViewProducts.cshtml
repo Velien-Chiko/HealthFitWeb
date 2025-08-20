@@ -1,0 +1,44 @@
+@model HealthFit.Models.DTO.MealPlan.MealPlanDto
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm trong kế hoạch bữa ăn";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Chi tiết sản phẩm trong kế hoạch: @Model.MealPlanName</h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Danh sách sản phẩm</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Calo</th>
+                            <th>Số lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model.Products)
+                        {
+                            <tr>
+                                <td>@product.ProductID</td>
+                                <td>@product.ProductName</td>
+                                <td>@product.Calo</td>
+                                <td>@product.Quantity</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div> 

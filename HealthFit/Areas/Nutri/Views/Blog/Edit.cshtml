@@ -1,0 +1,535 @@
+@model HealthFit.Models.Blog
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <form method="post" asp-action="Edit" enctype="multipart/form-data">
+                <input asp-for="BlogId" hidden />
+                <input asp-for="UserId" hidden />
+                <input asp-for="CreatedDate" hidden />
+                <input asp-for="ImageUrl" type="hidden" />
+
+                <div class="card shadow-lg border-0 rounded-lg mt-4 natural-card">
+                    <div class="card-header natural-header text-white">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-edit me-2"></i>
+                            <h3 class="mb-0">Chỉnh sửa Blog Healthy Food</h3>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 natural-body">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger natural-alert d-none"></div>
+
+                        <!-- Title Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="Title" class="form-label fw-bold natural-label">
+                                <i class="fas fa-seedling me-2 text-success"></i>Tiêu đề bài viết
+                            </label>
+                            <input asp-for="Title" class="form-control form-control-lg natural-input" placeholder="Cập nhật tiêu đề về thực phẩm healthy..." />
+                            <span asp-validation-for="Title" class="text-danger small natural-error"></span>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="Content" class="form-label fw-bold natural-label">
+                                <i class="fas fa-carrot me-2 text-success"></i>Nội dung bài viết
+                            </label>
+                            <textarea asp-for="Content" class="form-control natural-textarea" rows="6" placeholder="Cập nhật nội dung về lợi ích healthy food..."></textarea>
+                            <span asp-validation-for="Content" class="text-danger small natural-error"></span>
+                        </div>
+
+                        <!-- BMI Input Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="Bmirange" class="form-label fw-bold natural-label">
+                                <i class="fas fa-chart-line me-2 text-success"></i>Nhập chỉ số BMI
+                            </label>
+                            <input asp-for="Bmirange" type="number" min="0" step="0.1" class="form-control form-control-lg natural-input" placeholder="Ví dụ: 22.5" />
+                            <span asp-validation-for="Bmirange" class="text-danger small natural-error"></span>
+                        </div>
+
+
+                        <!-- Image Upload Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label class="form-label fw-bold natural-label">
+                                <i class="fas fa-image me-2 text-success"></i>Chọn ảnh mới (nếu muốn)
+                            </label>
+                            <input type="file" name="ImageFile" id="imageInput" class="form-control" accept="image/*" />
+
+                            <div class="form-text natural-help-text">
+                                <i class="fas fa-info-circle me-1"></i>Bạn có thể bỏ qua nếu không muốn thay đổi ảnh
+                            </div>
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="form-group mt-3">
+                                    <label>Ảnh hiện tại / mới:</label><br />
+                                    <img id="previewImage" src="@Model.ImageUrl" alt="Ảnh hiện tại" class="img-thumbnail" style="max-height: 200px;" />
+                                </div>
+
+                            }
+                        </div>
+
+
+                        <!-- Image Preview Section -->
+                        <div class="mb-4 input-group-natural" id="imagePreviewSection" style="display: none;">
+                            <div class="natural-image-preview">
+                                <img id="imagePreview" src="" alt="Preview" class="img-thumbnail natural-preview-img" />
+                            </div>
+                        </div>
+
+                        <!-- Last Updated Info -->
+                        <div class="mb-4 input-group-natural">
+                            <div class="natural-info-box">
+                                <i class="fas fa-clock me-2 text-success"></i>
+                                <strong>Cập nhật lần cuối:</strong>
+                                <span class="text-muted">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="card-footer natural-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-controller="Blog" asp-action="Index" class="btn btn-outline-natural btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                            </a>
+                            <div class="d-flex gap-3">                               
+                                <button type="submit" class="btn btn-natural btn-lg">
+                                    <i class="fas fa-save me-2"></i>Cập nhật Blog
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Natural Theme Colors */
+    :root {
+        --primary-green: #2d7d2d;
+        --secondary-green: #4caf50;
+        --light-green: #81c784;
+        --very-light-green: #e8f5e8;
+        --natural-brown: #8d6e63;
+        --natural-beige: #f1f8e9;
+        --natural-white: #fafafa;
+        --warning-orange: #ff9800;
+        --success-green: #4caf50;
+    }
+
+    .natural-card {
+        background: linear-gradient(135deg, var(--natural-white) 0%, var(--very-light-green) 100%);
+        border: 2px solid var(--very-light-green);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(45, 125, 45, 0.1);
+    }
+
+        .natural-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(45, 125, 45, 0.15);
+        }
+
+    .natural-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+        border-bottom: 3px solid var(--light-green);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .natural-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+   
+
+    {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(100%);
+    }
+
+    }
+
+    .natural-body {
+        background: var(--natural-beige);
+        position: relative;
+    }
+
+    .natural-footer {
+        background: linear-gradient(135deg, var(--very-light-green) 0%, var(--natural-beige) 100%);
+        border-top: 2px solid var(--light-green);
+    }
+
+    .natural-label {
+        color: var(--primary-green);
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+    }
+
+    .natural-input, .natural-select, .natural-textarea {
+        border: 2px solid var(--light-green);
+        background: var(--natural-white);
+        transition: all 0.3s ease;
+        border-radius: 12px;
+    }
+
+        .natural-input:focus, .natural-select:focus, .natural-textarea:focus {
+            border-color: var(--secondary-green);
+            box-shadow: 0 0 0 0.3rem rgba(76, 175, 80, 0.25);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+    .natural-textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .input-group-natural {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+        .input-group-natural::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--light-green) 50%, transparent 100%);
+            opacity: 0.3;
+        }
+
+    .natural-url-icon {
+        background: var(--light-green);
+        border: 2px solid var(--light-green);
+        border-radius: 12px 0 0 12px;
+        color: white;
+    }
+
+    .natural-help-text {
+        color: var(--primary-green);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    .natural-error {
+        background: rgba(220, 53, 69, 0.1);
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin-top: 0.5rem;
+        display: inline-block;
+    }
+
+    .natural-alert {
+        background: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        border-radius: 12px;
+    }
+
+    .natural-switch {
+        background: var(--natural-white);
+        padding: 16px 24px;
+        border-radius: 20px;
+        border: 2px solid var(--light-green);
+        transition: all 0.3s ease;
+    }
+
+        .natural-switch:hover {
+            background: var(--very-light-green);
+            transform: translateY(-2px);
+        }
+
+    .natural-switch-input {
+        width: 3rem;
+        height: 1.5rem;
+        background-color: var(--natural-brown);
+        border: none;
+    }
+
+        .natural-switch-input:checked {
+            background-color: var(--success-green);
+            border-color: var(--success-green);
+        }
+
+    .natural-switch-label {
+        color: var(--primary-green);
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .switch-text-approved, .switch-text-pending {
+        transition: all 0.3s ease;
+    }
+
+    .natural-switch-input:checked ~ .natural-switch-label .switch-text-pending {
+        display: none;
+    }
+
+    .natural-switch-input:not(:checked) ~ .natural-switch-label .switch-text-approved {
+        display: none;
+    }
+
+    .natural-info-box {
+        background: var(--natural-white);
+        padding: 16px 24px;
+        border-radius: 15px;
+        border: 2px solid var(--light-green);
+        color: var(--primary-green);
+    }
+
+    .natural-image-preview {
+        text-align: center;
+        padding: 20px;
+        background: var(--natural-white);
+        border-radius: 15px;
+        border: 2px dashed var(--light-green);
+    }
+
+    .natural-preview-img {
+        max-width: 300px;
+        max-height: 200px;
+        border-radius: 10px;
+        border: 3px solid var(--light-green);
+    }
+
+    .btn-natural {
+        background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-green) 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(45, 125, 45, 0.3);
+    }
+
+        .btn-natural:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(45, 125, 45, 0.4);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+        }
+
+    .btn-outline-natural {
+        border: 2px solid var(--secondary-green);
+        color: var(--primary-green);
+        background: transparent;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-natural:hover {
+            background: var(--secondary-green);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+    .btn-preview-natural {
+        background: linear-gradient(135deg, var(--warning-orange) 0%, #f57c00 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+    }
+
+        .btn-preview-natural:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+            color: white;
+        }
+
+    
+   
+
+    {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+
+    }
+
+    .fas.fa-edit, .fas.fa-seedling, .fas.fa-carrot {
+        animation: leafFloat 3s ease-in-out infinite;
+    }
+
+
+    {
+        margin: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-natural, .btn-outline-natural, .btn-preview-natural {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    }
+</style>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-resize textarea
+            const textarea = document.querySelector('textarea[asp-for="Content"]');
+            if (textarea) {
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+            }
+
+            // Image URL preview
+            const imageUrlInput = document.querySelector('input[asp-for="ImageUrl"]');
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewSection = document.getElementById('imagePreviewSection');
+
+            function updateImagePreview() {
+                const url = imageUrlInput.value.trim();
+                if (url) {
+                    imagePreview.src = url;
+                    imagePreview.onload = function() {
+                        imagePreviewSection.style.display = 'block';
+                    };
+                    imagePreview.onerror = function() {
+                        imagePreviewSection.style.display = 'none';
+                    };
+                } else {
+                    imagePreviewSection.style.display = 'none';
+                }
+            }
+
+            // Check if there's already an image URL
+            if (imageUrlInput && imageUrlInput.value.trim()) {
+                updateImagePreview();
+            }
+
+            // Update preview when URL changes
+            if (imageUrlInput) {
+                imageUrlInput.addEventListener('input', updateImagePreview);
+                imageUrlInput.addEventListener('blur', updateImagePreview);
+            }
+
+            // Preview button functionality
+            const previewBtn = document.getElementById('previewBtn');
+            if (previewBtn) {
+                previewBtn.addEventListener('click', function() {
+                    const title = document.querySelector('input[asp-for="Title"]').value;
+                    const content = document.querySelector('textarea[asp-for="Content"]').value;
+                    const bmiRange = document.querySelector('select[asp-for="Bmirange"]').value;
+                    const imageUrl = document.querySelector('input[asp-for="ImageUrl"]').value;
+
+                    if (!title || !content) {
+                        alert('Vui lòng nhập tiêu đề và nội dung để xem trước!');
+                        return;
+                    }
+
+                    // Create preview modal or new window
+                    const previewContent = `
+                        <div style="max-width: 800px; margin: 20px auto; padding: 20px; font-family: Arial, sans-serif;">
+                            <h1 style="color: #2d7d2d; border-bottom: 2px solid #4caf50; padding-bottom: 10px;">${title}</h1>
+                            ${imageUrl ? `<img src="${imageUrl}" style="max-width: 100%; height: auto; border-radius: 10px; margin: 20px 0;" />` : ''}
+                            <div style="background: #f1f8e9; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                                <strong>Phù hợp cho BMI:</strong> ${bmiRange || 'Chưa chọn'}
+                            </div>
+                            <div style="line-height: 1.6; color: #333;">${content.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+
+                    const previewWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+                    previewWindow.document.write(previewContent);
+                    previewWindow.document.close();
+                });
+            }
+
+            // Switch text animation
+            const switchInput = document.querySelector('.natural-switch-input');
+            if (switchInput) {
+                switchInput.addEventListener('change', function() {
+                    const switchContainer = this.closest('.natural-switch');
+                    if (this.checked) {
+                        switchContainer.style.borderColor = '#4caf50';
+                        switchContainer.style.backgroundColor = '#e8f5e8';
+                    } else {
+                        switchContainer.style.borderColor = '#81c784';
+                        switchContainer.style.backgroundColor = '#fafafa';
+                    }
+                });
+            }
+
+            // Natural focus effects
+            const inputs = document.querySelectorAll('.natural-input, .natural-textarea, .natural-select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#4caf50';
+                    this.style.boxShadow = '0 0 0 0.3rem rgba(76, 175, 80, 0.25)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#81c784';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>  
+}
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageInput = document.getElementById('imageInput');
+        const previewImage = document.getElementById('previewImage');
+
+        imageInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+
+

@@ -1,0 +1,23 @@
+﻿@model HealthFit.Models.MealPlanDetail
+
+@{
+    ViewData["Title"] = "Xóa Combo";
+}
+
+<h2>Bạn có chắc chắn muốn xóa combo này?</h2>
+
+<div class="mb-3">
+    <strong>Chỉ số BMI:</strong> @Model.Bmirange <br />
+    <strong>Mô tả:</strong> @Model.PlanDescription <br />
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <img src="@Model.ImageUrl" width="150" />
+    }
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="MealPlanDetailId" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
+ 

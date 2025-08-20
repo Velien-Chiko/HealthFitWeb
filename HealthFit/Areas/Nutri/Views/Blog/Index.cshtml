@@ -1,0 +1,183 @@
+﻿@model IPagedList<HealthFit.Models.Blog>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HealthyFit - Blog</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Fonts & CSS -->
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        .blog-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .text-green { color: #28a745 !important; }
+        .btn-green {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        .btn-green:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .pagination .page-link {
+            color: #28a745;
+            border-color: #28a745;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #28a745;
+            color: white;
+        }
+        .pagination .page-link:hover {
+            background-color: #e8f5e8;
+            color: #1e7e34;
+        }
+    </style>
+</head>
+<body class="goto-here">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">HeathyFit</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a href="#" class="nav-link">Blog</a></li>
+                    <li class="nav-item">
+                        <a asp-area="Nutri" asp-controller="CreateDish" asp-action="Index" class="nav-link">Create Dish</a>
+                    </li>
+                     <li class="nav-item">
+                         <a asp-area="Nutri" asp-controller="Combo" asp-action="Index" class="nav-link">Create Combo</a>
+                     </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <div class="hero-wrap hero-bread" style="background-image: url('/images/bg_1.jpg');">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 text-center">
+                    <p class="breadcrumbs"><span><a href="/">Home</a></span> <span>Blog</span></p>
+                    <h1 class="mb-0 bread">Blog</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Section -->
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+
+                <!-- Main content -->
+                <div class="col-lg-8">
+                    <!-- Search Box -->
+                    <form method="get" asp-action="Index" class="form-inline mb-4">
+                        <select class="form-control mr-2" name="searchType">
+                        <option value="Title" selected="@(ViewData["SearchType"]?.ToString() == "Title" ? "selected" : null)">Title</option>
+                        <option value="Bmirange" selected="@(ViewData["SearchType"]?.ToString() == "Bmirange" ? "selected" : null)">BMI</option>
+
+
+
+
+                        </select>
+
+                        <input type="text" class="form-control mr-2" name="searchString"
+                               placeholder="Nhập tên Blog..." value="@(ViewData["CurrentFilter"] ?? "")" />
+                        <button type="submit" class="btn btn-green">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+
+                    <!-- Blog Title -->
+                    <h2 class="text-green mb-4">Danh sách blog</h2>
+
+                    <!-- Blog List -->
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var blog in Model)
+                        {
+                            <div class="d-flex mb-4">
+                                <div class="blog-entry d-md-flex">
+                                    <img src="@(string.IsNullOrEmpty(blog.ImageUrl) ? "/images/default.jpg" : blog.ImageUrl)"
+                                         alt="@blog.Title" class="blog-image" />
+                                    <div class="text pl-md-4">
+                                        <div class="meta mb-2">
+                                            <div>@blog.CreatedDate?.ToString("yyyy-MM-dd")</div>
+                                            <div>@(blog.User?.FullName ?? "Anonymous")</div>
+                                            <div><span class="icon-chat"></span> 0</div>
+                                        </div>
+                                        <h3 class="heading">@blog.Title</h3>
+                                        <p><strong>BMI:</strong> @(blog.Bmirange.HasValue ? blog.Bmirange.Value.ToString("0.0") : "Không có")</p>
+
+                                        <p>@(blog.Content.Length > 100 ? blog.Content.Substring(0, 100) + "..." : blog.Content)</p>
+
+                                        <p>
+                                            <a href="@Url.Action("ReadMore", "Blog", new { BlogId = blog.BlogId })" class="btn btn-primary btn-sm">Read more</a>
+                                            <a asp-area="Nutri" asp-controller="Blog" asp-action="Edit" asp-route-id="@blog.BlogId" class="btn btn-outline-warning btn-sm ml-2">Edit</a>
+                                            <a href="@Url.Action("Delete", "Blog", new { BlogId = blog.BlogId })" class="btn btn-outline-danger btn-sm ml-2">Delete</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Pagination at the bottom -->
+                        <div class="mt-4">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new {
+                                page,
+                                searchType = ViewData["SearchType"],
+                                searchString = ViewData["CurrentFilter"]
+                            }), new PagedListRenderOptions {
+                                LiElementClasses = new[] { "page-item" },
+                                PageClasses = new[] { "page-link" }
+                            })
+                        </div>
+                    }
+                    else
+{
+                        <div class="alert alert-warning">
+                            <strong>Không tìm thấy blog nào phù hợp với từ khóa hoặc chỉ số BMI đã nhập.</strong>
+                         </div>
+}
+
+                </div>
+               
+                <!-- Sidebar -->
+                <div class="col-lg-4 sidebar">
+                    <div class="sidebar-box">
+                        <a asp-area="Nutri" asp-controller="Blog" asp-action="CreateBlog" class="btn btn-green btn-block">
+                            <i class="fas fa-plus mr-2"></i>Tạo Blog
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

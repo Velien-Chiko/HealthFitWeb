@@ -1,0 +1,208 @@
+@model HealthFit.Models.User
+@using HealthFit.Models
+
+<!-- Thanh điều hướng cho Seller: giúp chuyển nhanh giữa các chức năng chính -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 rounded">
+    <div class="container-fluid">
+        <span class="navbar-brand fw-bold">Seller Menu</span>
+        <div class="navbar-nav">
+            <!-- Link về Dashboard -->
+            <a class="nav-link" asp-controller="Seller" asp-action="Dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <!-- Link cập nhật thông tin cá nhân (đang active) -->
+            <a class="nav-link active" asp-controller="Seller" asp-action="EditProfile">
+                <i class="fas fa-user-edit"></i> Cập nhật thông tin
+            </a>
+            <!-- Link quản lý sản phẩm -->
+            <a class="nav-link" asp-controller="Seller" asp-action="ProductList">
+                <i class="fas fa-box"></i> Quản lý sản phẩm
+            </a>
+            <!-- Link quản lý đơn hàng -->
+            <a class="nav-link" asp-controller="Seller" asp-action="OrderList">
+                <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+            </a>
+        </div>
+    </div>
+</nav>
+
+<h2>Cập nhật thông tin cá nhân</h2>
+
+<!-- Thông báo thành công/lỗi khi cập nhật thông tin -->
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">@ViewBag.Success</div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<!-- Form chỉnh sửa thông tin cá nhân -->
+<form asp-action="EditProfile" method="post">
+    <!-- Họ và tên: trường bắt buộc, có validate -->
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label">Họ và tên</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+    <!-- Email: trường bắt buộc, có validate -->
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <!-- Số điện thoại: trường bắt buộc, có validate -->
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label">Số điện thoại</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <!-- Tỉnh/Thành phố: chọn từ danh sách, sẽ tự động fill quận/huyện -->
+    <div class="mb-3">
+        <label class="form-label">Tỉnh/Thành phố</label>
+        <select id="city" name="City" class="form-control" asp-for="City">
+            <option value="">-- Chọn tỉnh/thành --</option>
+            <!-- Danh sách các tỉnh/thành phố lớn, có thể bổ sung thêm -->
+            <option value="Hà Nội">Hà Nội</option>
+            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+            <option value="Đà Nẵng">Đà Nẵng</option>
+            <option value="Hải Phòng">Hải Phòng</option>
+            <option value="Cần Thơ">Cần Thơ</option>
+            <option value="An Giang">An Giang</option>
+            <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+            <option value="Bắc Giang">Bắc Giang</option>
+            <option value="Bắc Kạn">Bắc Kạn</option>
+            <option value="Bạc Liêu">Bạc Liêu</option>
+            <option value="Bắc Ninh">Bắc Ninh</option>
+            <option value="Bến Tre">Bến Tre</option>
+            <option value="Bình Định">Bình Định</option>
+            <option value="Bình Dương">Bình Dương</option>
+            <option value="Bình Phước">Bình Phước</option>
+            <option value="Bình Thuận">Bình Thuận</option>
+            <option value="Cà Mau">Cà Mau</option>
+            <option value="Cao Bằng">Cao Bằng</option>
+            <option value="Đắk Lắk">Đắk Lắk</option>
+            <option value="Đắk Nông">Đắk Nông</option>
+            <option value="Điện Biên">Điện Biên</option>
+            <option value="Đồng Nai">Đồng Nai</option>
+            <option value="Đồng Tháp">Đồng Tháp</option>
+            <option value="Gia Lai">Gia Lai</option>
+            <option value="Hà Giang">Hà Giang</option>
+            <option value="Hà Nam">Hà Nam</option>
+            <option value="Hà Tĩnh">Hà Tĩnh</option>
+            <option value="Hải Dương">Hải Dương</option>
+            <option value="Hậu Giang">Hậu Giang</option>
+            <option value="Hòa Bình">Hòa Bình</option>
+            <option value="Hưng Yên">Hưng Yên</option>
+            <option value="Khánh Hòa">Khánh Hòa</option>
+            <option value="Kiên Giang">Kiên Giang</option>
+            <option value="Kon Tum">Kon Tum</option>
+            <option value="Lai Châu">Lai Châu</option>
+            <option value="Lâm Đồng">Lâm Đồng</option>
+            <option value="Lạng Sơn">Lạng Sơn</option>
+            <option value="Lào Cai">Lào Cai</option>
+            <option value="Long An">Long An</option>
+            <option value="Nam Định">Nam Định</option>
+            <option value="Nghệ An">Nghệ An</option>
+            <option value="Ninh Bình">Ninh Bình</option>
+            <option value="Ninh Thuận">Ninh Thuận</option>
+            <option value="Phú Thọ">Phú Thọ</option>
+            <option value="Phú Yên">Phú Yên</option>
+            <option value="Quảng Bình">Quảng Bình</option>
+            <option value="Quảng Nam">Quảng Nam</option>
+            <option value="Quảng Ngãi">Quảng Ngãi</option>
+            <option value="Quảng Ninh">Quảng Ninh</option>
+            <option value="Quảng Trị">Quảng Trị</option>
+            <option value="Sóc Trăng">Sóc Trăng</option>
+            <option value="Sơn La">Sơn La</option>
+            <option value="Tây Ninh">Tây Ninh</option>
+            <option value="Thái Bình">Thái Bình</option>
+            <option value="Thái Nguyên">Thái Nguyên</option>
+            <option value="Thanh Hóa">Thanh Hóa</option>
+            <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+            <option value="Tiền Giang">Tiền Giang</option>
+            <option value="Trà Vinh">Trà Vinh</option>
+            <option value="Tuyên Quang">Tuyên Quang</option>
+            <option value="Vĩnh Long">Vĩnh Long</option>
+            <option value="Vĩnh Phúc">Vĩnh Phúc</option>
+            <option value="Yên Bái">Yên Bái</option>
+        </select>
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <!-- Quận/Huyện: sẽ tự động fill theo tỉnh/thành phố đã chọn -->
+    <div class="mb-3">
+        <label class="form-label">Quận/Huyện</label>
+        <select id="district" name="District" class="form-control">
+            <option value="">-- Chọn quận/huyện --</option>
+        </select>
+        <span class="text-danger"></span>
+    </div>
+    <!-- Địa chỉ cụ thể: nhập địa chỉ chi tiết -->
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label">Địa chỉ cụ thể</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <!-- Giới tính: nhập hoặc chọn -->
+    <div class="mb-3">
+        <label asp-for="Gender" class="form-label">Giới tính</label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <!-- Mật khẩu mới: có thể đổi hoặc bỏ qua -->
+    <div class="mb-3">
+        <label class="form-label">Mật khẩu mới</label>
+        <input name="newPassword" class="form-control" type="password" />
+        <span class="text-muted">Để trống nếu không muốn đổi mật khẩu</span>
+    </div>
+    <!-- Nút lưu thay đổi -->
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+</form>
+
+<!-- Script tự động fill quận/huyện theo tỉnh/thành phố -->
+<script>
+    // Danh sách quận/huyện cho một số tỉnh/thành phố lớn
+    const districts = {
+        "Hà Nội": ["Ba Đình", "Hoàn Kiếm", "Đống Đa", "Hai Bà Trưng", "Cầu Giấy", "Thanh Xuân", "Long Biên", "Nam Từ Liêm", "Bắc Từ Liêm", "Hà Đông", "Tây Hồ", "Hoàng Mai"],
+        "Hồ Chí Minh": ["Quận 1", "Quận 2", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 9", "Quận 10", "Quận 11", "Quận 12", "Bình Thạnh", "Gò Vấp", "Phú Nhuận", "Tân Bình", "Tân Phú", "Thủ Đức", "Bình Tân", "Bình Chánh", "Củ Chi", "Hóc Môn", "Nhà Bè", "Cần Giờ"],
+        "Đà Nẵng": ["Hải Châu", "Thanh Khê", "Sơn Trà", "Ngũ Hành Sơn", "Liên Chiểu", "Cẩm Lệ", "Hòa Vang", "Hoàng Sa"],
+        "Hải Phòng": ["Hồng Bàng", "Ngô Quyền", "Lê Chân", "Kiến An", "Hải An", "Dương Kinh", "Đồ Sơn", "An Dương", "An Lão", "Kiến Thụy", "Thủy Nguyên", "Tiên Lãng", "Vĩnh Bảo", "Cát Hải", "Bạch Long Vĩ"],
+        // ... bạn có thể bổ sung thêm các tỉnh/thành khác ...
+    };
+
+    // Hàm fill quận/huyện khi chọn tỉnh/thành phố
+    function fillDistricts(selectedCity, selectedDistrict) {
+        var districtSelect = document.getElementById('district');
+        districtSelect.innerHTML = '<option value="">-- Chọn quận/huyện --</option>';
+        if (districts[selectedCity]) {
+            districts[selectedCity].forEach(function (d) {
+                var opt = document.createElement('option');
+                opt.value = d;
+                opt.innerHTML = d;
+                if (selectedDistrict && selectedDistrict === d) {
+                    opt.selected = true;
+                }
+                districtSelect.appendChild(opt);
+            });
+        }
+    }
+
+    // Khi thay đổi tỉnh/thành phố, tự động fill lại quận/huyện
+    document.getElementById('city').addEventListener('change', function () {
+        fillDistricts(this.value, null);
+    });
+
+    // Khi load trang, nếu đã có City và District thì tự động fill
+    window.addEventListener('DOMContentLoaded', function () {
+        var selectedCity = document.getElementById('city').value;
+        var selectedDistrict = '@(Model.District ?? "")';
+        if (selectedCity) {
+            fillDistricts(selectedCity, selectedDistrict);
+        }
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

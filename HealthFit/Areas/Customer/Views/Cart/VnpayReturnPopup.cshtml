@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+    bool success = ViewBag.Success ?? false;
+    int orderId = ViewBag.OrderId ?? 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kết quả thanh toán</title>
+</head>
+<body>
+    <h2>@(success ? "Thanh toán thành công!" : "Thanh toán thất bại!")</h2>
+    <script>
+        // Gửi message về tab gốc
+        if (window.opener) {
+            window.opener.postMessage({
+                vnpaySuccess: @success.ToString().ToLower(),
+                orderId: @orderId
+            }, "*");
+        }
+        // Tự động đóng tab sau 2 giây
+        setTimeout(function() {
+            window.close();
+        }, 2000);
+    </script>
+</body>
+</html>

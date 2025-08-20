@@ -1,0 +1,83 @@
+﻿@{
+	ViewData["Title"] = "Thêm Người Dùng Mới";
+	var roles = ViewBag.Roles as List<string>;
+}
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-8 col-lg-6">
+			<div class="card">
+				<div class="card-header text-center">
+					<h3 class="mb-0">
+						<i class="bi bi-person-plus-fill"></i> @ViewData["Title"]
+					</h3>
+				</div>
+				<div class="card-body">
+
+@* ============================= *@
+@* FORM TẠO NGƯỜI DÙNG MỚI *@
+@* Nhập email, họ tên, mật khẩu, chọn vai trò *@
+@* ============================= *@
+		<form asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="Create" method="post">
+			<div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+			<div class="form-floating mb-3">
+				<input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+				<label for="email">Email <span class="text-danger">*</span></label>
+			</div>
+
+			<div class="form-floating mb-3">
+				<input type="text" class="form-control" id="fullName" name="fullName" placeholder="Nguyễn Văn A">
+				<label for="fullName">Họ và Tên</label>
+			</div>
+
+			<div class="form-floating mb-3">
+				<select class="form-select" id="gender" name="gender" required>
+					<option value="">-- Chọn giới tính --</option>
+					<option value="Male">Nam</option>
+					<option value="Female">Nữ</option>
+					<option value="Other">Khác</option>
+				</select>
+				<label for="gender">Giới tính <span class="text-danger">*</span></label>
+			</div>
+
+			<div class="form-floating mb-3">
+				<input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required>
+				<label for="password">Mật khẩu <span class="text-danger">*</span></label>
+			</div>
+
+			<div class="form-floating mb-4">
+				<select class="form-select" id="role" name="role" required>
+					<option value="">-- Chọn vai trò --</option>
+					@foreach (var role in roles)
+					{
+						if (!role.ToLower().Contains("admin"))
+						{
+							<option value="@role">@role</option>
+						}
+					}
+				</select>
+				<label for="role">Vai trò <span class="text-danger">*</span></label>
+			</div>
+
+@* ============================= *@
+@* NÚT LƯU VÀ QUAY LẠI *@
+@* ============================= *@
+			<div class="d-flex justify-content-center gap-2">
+				<a asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="SystemAdmin" class="btn btn-secondary">
+					<i class="bi bi-arrow-left"></i> Quay lại
+				</a>
+				<button type="submit" class="btn btn-primary">
+					<i class="bi bi-save"></i> Lưu
+				</button>
+			</div>
+		</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

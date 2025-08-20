@@ -1,0 +1,226 @@
+﻿@model HealthFit.Models.CustomerProfile
+
+@{
+    ViewData["Title"] = "Profile Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions {
+    // Hàm này nhận vào BMI (kiểu decimal) và trả về chuỗi màu CSS tương ứng
+    private string GetBmiColorClass(decimal bmi)
+    {
+        if (bmi < 18.5m) return "text-warning";
+        if (bmi < 25m) return "text-success";
+        if (bmi < 30m) return "text-warning";
+        return "text-danger";
+    }
+
+    // Hàm này nhận vào BMI (decimal) và trả về chuỗi category
+    private string GetBmiCategory(decimal bmi)
+    {
+        if (bmi < 18.5m) return "Underweight";
+        if (bmi < 25m) return "Normal weight";
+        if (bmi < 30m) return "Overweight";
+        return "Obese";
+    }
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <!-- Avatar & Username Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="profile-icon mb-3">
+                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+                    </div>
+                    <h5 class="my-3">
+                        @(
+                            Model.User?.FullName 
+                            ?? Model.User?.UserName 
+                            ?? "User"
+                        )
+                    </h5>
+                    <div class="text-muted mb-2">
+                        @Model.User?.Email
+                    </div>
+                    <div class="d-flex justify-content-center mb-2">
+                        <a asp-action="Edit" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BMI Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">BMI Status</h5>
+                    @if (Model.Bmi.HasValue)
+                    {
+                        <div class="display-4 mb-2">@Model.Bmi.Value.ToString("F1")</div>
+                        <p class="mb-0 @GetBmiColorClass(Model.Bmi.Value)">
+                            <i class="fas fa-chart-line me-2"></i>
+                            @GetBmiCategory(Model.Bmi.Value)
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-scale-balanced me-2"></i>
+                            Add height and weight to calculate BMI
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Profile Information Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Full Name -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-id-card me-2"></i>Full Name</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.User?.FullName ?? "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-envelope me-2"></i>Email</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.User?.Email ?? "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- Address -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Address</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.User?.Address ?? "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- City & Country -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-city me-2"></i>City, Country</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @{
+                                    var city = Model.User?.City;
+                                    var country = Model.User?.Country;
+                                    if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(country))
+                                    {
+                                        @($"{city}, {country}")
+                                    }
+                                    else if (!string.IsNullOrEmpty(city))
+                                    {
+                                        @city
+                                    }
+                                    else if (!string.IsNullOrEmpty(country))
+                                    {
+                                        @country
+                                    }
+                                    else
+                                    {
+                                        @("Not specified")
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- Gender (from CustomerProfile) -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-venus-mars me-2"></i>Gender</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.Gender ?? "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- Height & Weight -->
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-ruler-vertical me-2"></i>Height</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.Height.HasValue ? Model.Height.Value.ToString("F1") + " cm" : "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <p class="mb-0"><i class="fas fa-weight-scale me-2"></i>Weight</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="text-muted mb-0">
+                                @(Model.Weight.HasValue ? Model.Weight.Value.ToString("F1") + " kg" : "Not specified")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+<style>
+    .seller-search-btn {
+        border-radius: 16px !important;
+        padding: 0.25rem 0.7rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+        transition: all 0.2s cubic-bezier(.4,0,.2,1);
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        color: #fff;
+        border: none;
+        height: 32px;
+        min-width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+    .seller-search-btn:hover {
+        background: linear-gradient(135deg, #224abe 0%, #4e73df 100%);
+        transform: translateY(-2px) scale(1.06);
+        box-shadow: 0 6px 18px rgba(78,115,223,0.15);
+        color: #fff;
+    }
+    media (max-width: 768px) {
+        .seller-search-btn span { display: none; }
+    }
+</style>
+

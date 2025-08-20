@@ -1,0 +1,74 @@
+﻿@using HealthFit.Models.DTO.Report
+
+@{
+    var monthlyData = (IEnumerable<MonthlyRevenueReportDto>)ViewBag.MonthlyData;
+    var quarterlyData = (IEnumerable<QuarterlyRevenueReportDto>)ViewBag.QuarterlyData;
+    int selectedYear = (int)ViewBag.SelectedYear;
+}
+
+<form method="get" asp-action="Index" class="mb-4">
+    <label for="year">Chọn năm:</label>
+    <select name="year" id="year" onchange="this.form.submit()">
+        @for (int year = DateTime.Now.Year; year >= 2020; year--)
+        {
+            if (year == selectedYear)
+            {
+                <option value="@year" selected="selected">Năm @year</option>
+            }
+            else
+            {
+                <option value="@year">Năm @year</option>
+            }
+        }
+    </select>
+</form>
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Báo cáo doanh thu theo tháng</h5>
+        <canvas id="monthlyRevenueChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h5>Báo cáo doanh thu theo quý</h5>
+        <canvas id="quarterlyRevenueChart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dữ liệu từ server
+        const monthlyLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(monthlyData.Select(d => $"Tháng {d.Month}")));
+        const monthlyValues = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(monthlyData.Select(d => d.TotalRevenue)));
+
+        const quarterlyLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(quarterlyData.Select(d => $"Quý {d.Quarter}")));
+        const quarterlyValues = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(quarterlyData.Select(d => d.TotalRevenue)));
+
+        // Vẽ biểu đồ tháng
+        new Chart(document.getElementById('monthlyRevenueChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Doanh thu theo tháng',
+                    data: monthlyValues,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        // Vẽ biểu đồ quý
+        new Chart(document.getElementById('quarterlyRevenueChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: quarterlyLabels,
+                datasets: [{
+                    label: 'Doanh thu theo quý',
+                    data: quarterlyValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                }]
+            }
+        });
+    </script>
+}

@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+</head>
+<body class="goto-here">
+    <section id="home-section" class="hero">
+        <div class="home-slider owl-carousel">
+            <div class="slider-item" style="background-image: url(images/bg_1.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+
+                        <div class="col-md-12 ftco-animate text-center">
+                            <h1 class="mb-2">Chúng tôi cung cấp đồ ăn healthy</h1>
+                            <h2 class="subheading mb-4">Giao hàng hỏa tốc</h2>
+                            <p><a href="#" class="btn btn-primary">View Details</a></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-item" style="background-image: url(images/bg_2.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+
+                        <div class="col-sm-12 ftco-animate text-center">
+                            <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
+                            <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+                            <p><a href="#" class="btn btn-primary">View Details</a></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Free Shipping *@
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row no-gutters ftco-services">
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-shipped"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Giao hàng miễn phí </h3>
+                            <span>Cho đơn hàng trên 100k</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-diet"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Luôn luôn tươi ngon</h3>
+                            <span>Đóng gói cẩn thận, sạch sẽ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-award"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Đóng gói cẩn thận, sạch sẽ</h3>
+                            <span>Sản phẩm được chọn lọc kỹ lưỡng</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-customer-service"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">>Hỗ Trợ Nhiệt Tình</h3>
+                            <span>Chăm sóc khách hàng 24/7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Vegetable-Prodcut the health of every home *@
+    <section class="ftco-section ftco-category ftco-no-pt">
+        <div class="container">
+            <div class="row">
+                <!-- Meal Plan -->
+                <div class="col-md-6 d-flex align-items-stretch">
+                    <div class="category-wrap-2 ftco-animate img d-flex align-items-center position-relative"
+                         style="background-image: url('/images/category-mealplan.jpg'); height: 100%;">
+                        <a asp-area="Store" asp-controller="Store" asp-action="Index" class="stretched-link"></a>
+                        <div class="text text-center w-100">
+                            <h2>Meal Plan</h2>
+                            <p>Ăn lành, sống khỏe mỗi ngày</p>
+                            <p><span class="btn btn-primary">Xem thực đơn</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tráng miệng -->
+                <div class="col-md-6 d-flex align-items-stretch">
+                    <div class="category-wrap ftco-animate img d-flex align-items-end position-relative"
+                         style="background-image: url('/images/category-2.jpg');">
+                        <a asp-area="Store" asp-controller="Product" asp-action="Index" asp-route-categoryId="2" class="stretched-link"></a>
+                        <div class="text px-3 py-1">
+                            <h2 class="mb-0 text-white">Tráng miệng</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Món mặn -->
+                <div class="col-md-6 d-flex align-items-stretch mt-4">
+                    <div class="category-wrap ftco-animate img d-flex align-items-end position-relative"
+                         style="background-image: url('/images/category-1.jpg');">
+                        <a asp-area="Store" asp-controller="Product" asp-action="Index" asp-route-categoryId="1" class="stretched-link"></a>
+                        <div class="text px-3 py-1">
+                            <h2 class="mb-0 text-white">Món mặn</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Đồ uống -->
+                <div class="col-md-6 d-flex align-items-stretch mt-4">
+                    <div class="category-wrap ftco-animate img d-flex align-items-end position-relative"
+                         style="background-image: url('/images/category-3.jpg');">
+                        <a asp-area="Store" asp-controller="Product" asp-action="Index" asp-route-categoryId="3" class="stretched-link"></a>
+                        <div class="text px-3 py-1">
+                            <h2 class="mb-0 text-white">Đồ uống</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-3 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <p>Nơi hội tụ tinh hoa từ những vườn rau sạch khắp mọi miền đất Việt, tươi ngon và đậm đà vị quê hương</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+
+﻿@using X.PagedList.Mvc.Core
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model HealthFit.Models.ViewModels.MealPlanSearchViewModel
+
+@{
+    ViewData["Title"] = "Duyệt thực đơn";
+}
+
+<h2 class="mb-4">Danh sách thực đơn cần duyệt</h2>
+
+<form method="get" asp-action="Approve" class="row g-3 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm mô tả..." value="@Model.SearchString" />
+    </div>
+    <div class="col-md-3">
+        <select name="bmi" class="form-select">
+            <option value="">Tất cả BMI</option>
+            <option value="dưới 18.5" selected="@(Model.BMI == "dưới 18.5")">Dưới 18.5</option>
+            <option value="18.5-24.9" selected="@(Model.BMI == "18.5-24.9")">18.5 - 24.9</option>
+            <option value="25-29.9" selected="@(Model.BMI == "25-29.9")">25 - 29.9</option>
+            <option value="30+" selected="@(Model.BMI == "30+")">30 trở lên</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+    </div>
+</form>
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success">@TempData["success"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger">@TempData["error"]</div>
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Mô tả</th>
+            <th>Phạm vi BMI</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.MealPlans != null && Model.MealPlans.Any())
+        {
+            foreach (var mealPlan in Model.MealPlans)
+            {
+                <tr>
+                    <td>@mealPlan.MealPlanDetailId</td>
+                    <td>@mealPlan.PlanDescription</td>
+                    <td>@mealPlan.Bmirange</td>
+                    <td>
+                        <a asp-action="ApproveMealPlan" asp-route-id="@mealPlan.MealPlanDetailId" class="btn btn-success btn-sm"
+                           onclick="return confirm('Bạn có chắc muốn duyệt thực đơn này?');">
+                            Duyệt
+                        </a>
+                        <a asp-action="ViewProducts" asp-controller="MealPlan" asp-route-id="@mealPlan.MealPlanDetailId" class="btn btn-info btn-sm">
+                            Xem chi tiết
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">Không có thực đơn nào cần duyệt.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+@if (Model.MealPlans != null && Model.MealPlans.PageCount > 1)
+{
+    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+        @Html.PagedListPager(
+                Model.MealPlans,
+                page => Url.Action("Approve", new { page, bmi = Model.BMI }),
+                new PagedListRenderOptions
+    {
+        MaximumPageNumbersToDisplay = 5,
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+                )
+    </nav>
+}

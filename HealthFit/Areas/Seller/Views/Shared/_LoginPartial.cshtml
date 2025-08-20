@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Identity;
+@using HealthFit.Models.Models;
+@inject SignInManager<User> SignInManager;
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <form asp-area="Store" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+            <button type="submit" class="nav-link btn btn-link text-dark" style=" margin-top: 2px">
+                Đăng Xuất
+            </button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Account" asp-action="Register">Đăng Ký</a>
+    </li>
+} 

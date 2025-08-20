@@ -1,0 +1,27 @@
+/* Style cho nút tìm kiếm và filter Seller */
+.seller-search-btn {
+    border-radius: 16px !important;
+    padding: 0.25rem 0.7rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+    transition: all 0.2s cubic-bezier(.4,0,.2,1);
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: #fff;
+    border: none;
+    height: 32px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+.seller-search-btn:hover {
+    background: linear-gradient(135deg, #224abe 0%, #4e73df 100%);
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 6px 18px rgba(78,115,223,0.15);
+    color: #fff;
+}
+@media only screen and (max-width: 768px) {
+    .seller-search-btn span { display: none; }
+} 

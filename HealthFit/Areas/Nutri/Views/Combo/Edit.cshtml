@@ -1,0 +1,99 @@
+﻿@model HealthFit.Models.MealPlanDetail
+@{
+    ViewData["Title"] = "Chỉnh sửa Combo";
+    var products = ViewBag.Products as List<HealthFit.Models.Product>;
+    var selectedIds = ViewBag.SelectedProductIds as List<int>;
+}
+
+<h2>Chỉnh sửa Combo</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="MealPlanDetailId" value="@Model.MealPlanDetailId" />
+
+    <div class="form-group mb-3">
+        <label for="bmirange">Chỉ số BMI</label>
+        <select name="bmirange" class="form-control" required>
+            <option value="">-- Chọn mức BMI --</option>
+            <option value="18.5">Dưới 18.5 (Thiếu cân)</option>
+            <option value="18.5 - 24.9">18.5 - 24.9 (Bình thường)</option>
+            <option value="25 - 29.9">25 - 29.9 (Thừa cân)</option>
+            <option value="30">30 trở lên (Béo phì)</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="planDescription">Mô tả</label>
+        <input name="planDescription" class="form-control" value="@Model.PlanDescription" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="imageFile">Hình ảnh</label>
+        <div class="d-flex align-items-start gap-3">
+            <img id="previewImage" src="@Model.ImageUrl" alt="Ảnh hiện tại" style="max-height: 150px; border-radius: 10px;" />
+            <div>
+                <input name="imageFile" class="form-control mb-2" type="file" id="imageInput" />
+                <small class="text-muted">Bạn có thể bỏ qua nếu không muốn thay đổi ảnh</small>
+            </div>
+        </div>
+    </div>
+
+
+    <h4>Chọn sản phẩm cho combo</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Chọn</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < products.Count; i++)
+            {
+                var product = products[i];
+                var selected = selectedIds.Contains(product.ProductId);
+                var quantity = selected && Model?.MealPlanProductDetails != null
+                ? (Model.MealPlanProductDetails.FirstOrDefault(m => m.ProductId == product.ProductId)?.Quantity ?? 0)
+                : 0;
+
+                <tr>
+                    <td>@product.Name</td>
+                    <td>
+                        <input type="checkbox" name="productIds" value="@product.ProductId"
+                               @(selected ? "checked" : "") onchange="toggleQuantity(this, @i)" />
+                    </td>
+                    <td>
+                        <input type="number" name="quantities" value="@quantity"
+                               id="quantity-@i" class="form-control"
+                               @(selected ? "" : "disabled") min="1" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+@section Scripts {
+    <script>
+        document.getElementById("imageInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById("previewImage");
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}
+<script>
+    function toggleQuantity(checkbox, index) {
+        const quantityInput = document.getElementById('quantity-' + index);
+        quantityInput.disabled = !checkbox.checked;
+        if (!checkbox.checked) quantityInput.value = 0;
+    }
+</script>

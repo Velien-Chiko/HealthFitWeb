@@ -1,0 +1,92 @@
+﻿@using HealthFit.Models.ViewModels
+@model RegisterViewModel
+
+@{
+	ViewData["Title"] = "Register";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="account-container">
+	<div class="account-box">
+		<h2 class=" text-center mb-4">Đăng Ký</h2>
+		<form asp-action="Register" method="post">
+			<div asp-validation-summary="ModelOnly" class=" text-danger">
+			</div>
+			<div class="md-3">
+				<label asp-for="Name" class="form-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="Email" class="form-label"></label>
+				<input asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="Password" class="form-label"></label>
+				<div class="password-wrapper" style="position:relative;">
+					<input asp-for="Password" class="form-control" id="Password" />
+					<span class="toggle-password animation-eyes" toggle="#Password" >
+						<i class="fa fa-eye"></i>
+					</span>
+				</div>
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="ConfirmPassword" class="form-label"></label>
+				<div class="password-wrapper" style="position:relative;">
+					<input asp-for="ConfirmPassword" class="form-control" id="ConfirmPassword" />
+					<span class="toggle-password animation-eyes" toggle="#ConfirmPassword">
+						<i class="fa fa-eye"></i>
+					</span>
+				</div>
+				<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="PhoneNumber" class="form-label"></label>
+				<input asp-for="PhoneNumber" class="form-control" />
+				<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+			</div>
+			
+			<div class="md-3">
+				<label asp-for="City" class="form-label"></label>
+				<input asp-for="City" class="form-control" />
+				<span asp-validation-for="City" class="text-danger"></span>
+			</div>
+
+			<div class="md-3">
+				<label asp-for="Address" class="form-label"></label>
+				<input asp-for="Address" class="form-control" />
+				<span asp-validation-for="Address" class="text-danger"></span>
+			</div>
+			<div class="md-3">
+				<label asp-for="Gender" class="form-label"></label>
+				<select asp-for="Gender" class="form-control">
+					<option value="">Chọn giới tính</option>
+					<option value="Male">Nam</option>
+					<option value="Female">Nữ</option>
+					<option value="Other">Khác</option>
+				</select>
+				<span asp-validation-for="Gender" class="text-danger"></span>
+			</div>
+			
+			<input type="submit" value="Đăng Ký" class="btn btn-succes w-100 p-2 login-center type-change" />
+
+			<p class=" text-center mt-2">
+				Đã có mật khẩu ? <a asp-controller="Account" asp-action="Login" class="text-decoration-none">Đăng Nhập</a>
+			</p>
+
+			<div class="text-center">
+				<a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Trở Lại Trang Chủ</a>
+			</div>
+
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/account.js"></script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

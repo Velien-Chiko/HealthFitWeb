@@ -1,0 +1,215 @@
+@{
+    ViewData["Title"] = "Tính chỉ số BMI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+    body.bmi-bg {
+        background-image: url('/images/top-7-trends-in-health-food.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .bmi-overlay {
+        background: rgba(255,255,255,0.92);
+        border-radius: 18px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.08);
+        padding: 2rem 1rem;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('bmi-bg');
+    });
+</script>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 bmi-overlay">
+            <div class="mb-3">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Quay lại
+                </a>
+            </div>
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0"><i class="bi bi-activity"></i> Tính chỉ số BMI</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form id="bmiForm" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="ddlHeight" class="form-label">Đơn vị chiều cao <i class="bi bi-rulers"></i></label>
+                            <select name="ddlHeight" id="ddlHeight" class="form-select" required>
+                                <option value="">Chọn đơn vị</option>
+                                <option value="CM">Xăng-ti-mét (CM)</option>
+                                <option value="Inches">Inch (In)</option>
+                                <option value="Feet">Feet (Ft)</option>
+                            </select>
+                            <small class="text-muted" id="heightHelp"></small>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txtHeight" class="form-label">Chiều cao</label>
+                            <input name="txtHeight" type="number" step="any" id="txtHeight" class="form-control" required placeholder="Nhập chiều cao của bạn">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txtWeight" class="form-label">Cân nặng (Kg) <i class="bi bi-weight"></i></label>
+                            <input name="txtWeight" type="number" step="any" id="txtWeight" class="form-control" required placeholder="Nhập cân nặng của bạn">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Giới tính <i class="bi bi-gender-ambiguous"></i></label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rdbGender" id="male" value="MALE" checked>
+                                <label class="form-check-label" for="male">Nam</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rdbGender" id="female" value="FEMALE">
+                                <label class="form-check-label" for="female">Nữ</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100 py-2" title="Nhấn để tính chỉ số BMI"><i class="bi bi-calculator"></i> Tính chỉ số BMI</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-6">
+                            <table class="table table-bordered table-striped mb-0" id="tbl_BMI_details">
+                                <tr class="bg-primary text-light text-center"><th colspan="2"><h4>Kết quả BMI</h4></th></tr>
+                                <tr><td><strong>Chỉ số BMI của bạn: </strong></td><td><strong><span class="text-primary fs-5" id="txtYourBmi"></span></strong></td></tr>
+                                <tr><td><strong>Đánh giá sức khỏe: </strong></td><td><strong><span class="text-primary" id="lblMessage"> </span></strong></td></tr>
+                                <tr><td><strong>Cân nặng lý tưởng: </strong></td><td><strong><span class="text-primary" id="lblIdealWeight1"></span> - <span class="text-primary" id="lblIdealWeight2"></span></strong></td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-2">
+                                <div id="bmiChart" style="height: 260px;"></div>
+                                <div class="text-center small text-muted mt-2">Biểu đồ phân loại chỉ số BMI theo Tổ chức Y tế Thế giới (WHO)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info mb-3">
+                <b>Hướng dẫn nhập chiều cao:</b><br>
+                - Nếu chọn <b>Xăng-ti-mét (CM)</b>: nhập số xăng-ti-mét (ví dụ: 170).<br>
+                - Nếu chọn <b>Inch (In)</b>: nhập số inch (ví dụ: 67).<br>
+                - Nếu chọn <b>Feet (Ft)</b>: nhập theo dạng feet.inch (ví dụ: 5.7 là 5 feet 7 inch).
+            </div>
+            <div class="alert alert-secondary">
+                <b>Ý nghĩa các mức chỉ số BMI:</b><br>
+                <ul class="mb-0">
+                    <li><span class="badge bg-danger">Dưới 18.5</span>: Thiếu cân (gầy)</li>
+                    <li><span class="badge bg-success">18.5 - 24.9</span>: Bình thường (khỏe mạnh)</li>
+                    <li><span class="badge bg-warning text-dark">25 - 29.9</span>: Thừa cân (cảnh báo)</li>
+                    <li><span class="badge bg-danger">30 trở lên</span>: Béo phì (nguy cơ cao)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Hướng dẫn nhập chiều cao động
+    $(document).ready(function () {
+        function updateHeightHelp() {
+            var unit = $('#ddlHeight').val();
+            if (unit === 'CM') {
+                $('#heightHelp').text('Nhập chiều cao bằng xăng-ti-mét. Ví dụ: 170');
+            } else if (unit === 'Inches') {
+                $('#heightHelp').text('Nhập chiều cao bằng inch. Ví dụ: 67');
+            } else if (unit === 'Feet') {
+                $('#heightHelp').text('Nhập chiều cao theo feet.inch. Ví dụ: 5.7 là 5 feet 7 inch');
+            } else {
+                $('#heightHelp').text('');
+            }
+        }
+        $('#ddlHeight').change(updateHeightHelp);
+        updateHeightHelp();
+
+        // Biểu đồ BMI
+        var ctx = document.createElement('canvas');
+        ctx.id = 'bmiBarChart';
+        document.getElementById('bmiChart').appendChild(ctx);
+        var bmiBar = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Thiếu cân (gầy)', 'Bình thường', 'Thừa cân', 'Béo phì'],
+                datasets: [{
+                    label: 'Khoảng chỉ số BMI',
+                    data: [18.5, 24.9, 29.9, 35],
+                    backgroundColor: [
+                        'rgba(220,53,69,0.7)',
+                        'rgba(25,135,84,0.7)',
+                        'rgba(255,193,7,0.7)',
+                        'rgba(220,53,69,0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var idx = context.dataIndex;
+                                if(idx === 0) return '< 18.5 (Thiếu cân)';
+                                if(idx === 1) return '18.5 - 24.9 (Bình thường)';
+                                if(idx === 2) return '25 - 29.9 (Thừa cân)';
+                                if(idx === 3) return '>= 30 (Béo phì)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 35,
+                        title: { display: true, text: 'Chỉ số BMI' },
+                        grid: { display: false }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // AJAX tính BMI
+        $('#bmiForm').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("BMICalculatorResult", "BMICalculator")',
+                type: 'GET',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#txtYourBmi').text(data.txtYourBmi);
+                    $('#lblMessage').text(data.lblMessage);
+                    $('#lblIdealWeight1').text(data.lblIdealWeight1);
+                    $('#lblIdealWeight2').text(data.lblIdealWeight2);
+                    // Highlight cột BMI
+                    if(data.txtYourBmi) {
+                        var bmi = parseFloat(data.txtYourBmi);
+                        var idx = 0;
+                        if(bmi < 18.5) idx = 0;
+                        else if(bmi < 25) idx = 1;
+                        else if(bmi < 30) idx = 2;
+                        else idx = 3;
+                        bmiBar.data.datasets[0].backgroundColor = ['rgba(220,53,69,0.7)','rgba(25,135,84,0.7)','rgba(255,193,7,0.7)','rgba(220,53,69,0.7)'];
+                        bmiBar.data.datasets[0].backgroundColor[idx] = 'rgba(0,123,255,0.9)';
+                        bmiBar.update();
+                    }
+                },
+                error: function () {
+                    $('#lblMessage').text('Có lỗi khi tính toán chỉ số BMI');
+                }
+            });
+        });
+    });
+</script>
+} 
+

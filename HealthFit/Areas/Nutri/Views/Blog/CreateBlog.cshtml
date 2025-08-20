@@ -1,0 +1,314 @@
+﻿@model HealthFit.Models.Blog;
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <form method="post" asp-action="CreateBlog" enctype="multipart/form-data">
+                <div class="card shadow-lg border-0 rounded-lg mt-4 natural-card">
+                    <div class="card-header natural-header text-white">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-leaf me-2"></i>
+                            <h3 class="mb-0">Tạo Blog Healthy Food</h3>
+                        </div>
+        <div asp-validation-summary="All"></div>
+       
+
+                    <div class="card-body p-4 natural-body">
+                        <div asp-validation-summary="All" class="alert alert-danger d-none"></div>
+
+                        <!-- Title Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="Title" class="form-label fw-bold natural-label">
+                                <i class="fas fa-seedling me-2 text-success"></i>Tiêu đề bài viết
+                            </label>
+                            <input asp-for="Title" class="form-control form-control-lg natural-input" placeholder="Nhập tiêu đề về thực phẩm healthy..." />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="Content" class="form-label fw-bold natural-label">
+                                <i class="fas fa-carrot me-2 text-success"></i>Nội dung bài viết
+                            </label>
+                            <textarea asp-for="Content" class="form-control natural-textarea" rows="6" placeholder="Chia sẻ về lợi ích của thực phẩm healthy..."></textarea>
+                            <span asp-validation-for="Content" class="text-danger small"></span>
+                        </div>
+
+                        <!-- BMI Range Section -->
+                            <div class="mb-4 input-group-natural">
+                                <label asp-for="Bmirange" class="form-label fw-bold natural-label">
+                                    <i class="fas fa-chart-line me-2 text-success"></i>Phù hợp với BMI
+                                </label>
+                                <input asp-for="Bmirange" type="number" step="0.1" min="0" class="form-control form-control-lg natural-input" placeholder="Nhập chỉ số BMI cần tìm..." />
+                                <span asp-validation-for="Bmirange" class="text-danger small"></span>
+                            </div>
+
+
+                        <!-- Image Upload Section -->
+                        <div class="mb-4 input-group-natural">
+                            <label asp-for="ImageUrl" class="form-label fw-bold natural-label">
+                                <i class="fas fa-camera me-2 text-success"></i>Hình ảnh món ăn
+                            </label>
+                            <div class="input-group natural-file-input">
+                                <span class="input-group-text natural-file-icon">
+                                    <i class="fas fa-upload text-success"></i>
+                                </span>
+                                <input name="ImageFile" type="file" class="form-control natural-input" accept="image/*" />
+                            </div>
+                            <div class="form-text natural-help-text">
+                                <i class="fas fa-info-circle me-1"></i>Tải lên ảnh thực phẩm healthy (JPG, PNG, GIF)
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="card-footer natural-footer">
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Blog" asp-action="Index" class="btn btn-outline-natural btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                            </a>
+                            <button type="submit" class="btn btn-natural btn-lg">
+                                <i class="fas fa-save me-2"></i>Xuất bản Blog
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Natural Theme Colors */
+    :root {
+        --primary-green: #2d7d2d;
+        --secondary-green: #4caf50;
+        --light-green: #81c784;
+        --very-light-green: #e8f5e8;
+        --natural-brown: #8d6e63;
+        --natural-beige: #f1f8e9;
+        --natural-white: #fafafa;
+    }
+
+    .natural-card {
+        background: linear-gradient(135deg, var(--natural-white) 0%, var(--very-light-green) 100%);
+        border: 2px solid var(--very-light-green);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(45, 125, 45, 0.1);
+    }
+
+        .natural-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(45, 125, 45, 0.15);
+        }
+
+    .natural-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+        border-bottom: 3px solid var(--light-green);
+    }
+
+    .natural-body {
+        background: var(--natural-beige);
+    }
+
+    .natural-footer {
+        background: linear-gradient(135deg, var(--very-light-green) 0%, var(--natural-beige) 100%);
+        border-top: 2px solid var(--light-green);
+    }
+
+    .natural-label {
+        color: var(--primary-green);
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+    }
+
+    .natural-input, .natural-select, .natural-textarea {
+        border: 2px solid var(--light-green);
+        background: var(--natural-white);
+        transition: all 0.3s ease;
+        border-radius: 12px;
+    }
+
+        .natural-input:focus, .natural-select:focus, .natural-textarea:focus {
+            border-color: var(--secondary-green);
+            box-shadow: 0 0 0 0.3rem rgba(76, 175, 80, 0.25);
+            background: white;
+        }
+
+    .natural-textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .input-group-natural {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+        .input-group-natural::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--light-green) 50%, transparent 100%);
+            opacity: 0.3;
+        }
+
+    .natural-file-input .input-group-text {
+        background: var(--light-green);
+        border: 2px solid var(--light-green);
+        border-radius: 12px 0 0 12px;
+    }
+
+    .natural-file-icon {
+        color: white;
+    }
+
+    .natural-help-text {
+        color: var(--primary-green);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    .natural-radio {
+        background: var(--natural-white);
+        padding: 12px 20px;
+        border-radius: 25px;
+        border: 2px solid var(--light-green);
+        transition: all 0.3s ease;
+    }
+
+        .natural-radio:hover {
+            background: var(--very-light-green);
+            transform: translateY(-2px);
+        }
+
+    .natural-radio-input:checked + .natural-radio-label.approved {
+        color: var(--secondary-green);
+        font-weight: bold;
+    }
+
+    .natural-radio-input:checked + .natural-radio-label.pending {
+        color: var(--natural-brown);
+        font-weight: bold;
+    }
+
+    .btn-natural {
+        background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-green) 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(45, 125, 45, 0.3);
+    }
+
+        .btn-natural:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(45, 125, 45, 0.4);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+        }
+
+    .btn-outline-natural {
+        border: 2px solid var(--secondary-green);
+        color: var(--primary-green);
+        background: transparent;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-natural:hover {
+            background: var(--secondary-green);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+   
+
+    {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+
+    }
+
+    .fas.fa-leaf, .fas.fa-seedling {
+        animation: leafFloat 3s ease-in-out infinite;
+    }
+
+    
+  
+
+    {
+        margin: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-natural, .btn-outline-natural {
+        width: 100%;
+    }
+
+    }
+</style>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        // Auto-resize textarea with natural animation
+        document.querySelector('textarea[asp-for="Content"]').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // File input with natural feedback
+        document.querySelector('input[name="ImageFile"]').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Healthy food image selected:', file.name);
+                    // Add green checkmark animation
+                    const icon = document.querySelector('.natural-file-icon i');
+                    icon.className = 'fas fa-check text-white';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-upload text-white';
+                    }, 2000);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Natural typing effect for placeholders
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.natural-input, .natural-textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#4caf50';
+                    this.style.boxShadow = '0 0 0 0.3rem rgba(76, 175, 80, 0.25)';
+                });
+            });
+        });
+    </script>
+}

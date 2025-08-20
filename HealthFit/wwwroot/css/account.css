@@ -1,0 +1,38 @@
+﻿.account-container {
+    background-image: url(../images/bg_2.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+.account-box {
+    background-color: #ffffff;
+    padding: 30px;
+    //border: 2px solid white;
+    //backdrop-filter: blur(20px);
+    border-radius: 10px;
+    //box-shadow: 0px 0px 15px cyan, 0px 0px 15px cyan inset;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    opacity: 0.9;
+    
+}
+.login-center {
+    background-color: #1a4892;
+    color: white;
+}
+.type-change{
+   margin-top: 15px;
+}
+.animation-eyes {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

@@ -1,0 +1,101 @@
+﻿@model IPagedList<HealthFit.Models.MealPlanDetail>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Danh sách Combo bữa ăn";
+}
+
+<div class="container my-4">
+    <h2 class="text-success mb-4">🥗 Danh sách Combo bữa ăn</h2>
+
+    <!-- Tìm kiếm & Nút tạo combo cùng hàng -->
+    <div class="row mb-4 align-items-center">
+        <!-- Form tìm kiếm bên trái -->
+        <div class="col-md-8 col-sm-12">
+            <form asp-area="Nutri" asp-controller="Combo" asp-action="Index" method="get" class="d-flex">
+                <input type="text" name="searchTerm" class="form-control me-2" placeholder="🔍 Tìm theo mô tả Combo..."
+                       value="@ViewBag.SearchTerm" />
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="fas fa-search"></i> Tìm
+                </button>
+            </form>
+        </div>
+
+        <!-- Nút tạo combo bên phải -->
+        <div class="col-md-4 col-sm-12 text-md-end text-start mt-2 mt-md-0">
+            <a asp-area="Nutri" asp-controller="Combo" asp-action="CreateCombo" class="btn btn-success shadow-sm">
+                <i class="fas fa-plus-circle"></i> Tạo Combo
+            </a>
+        </div>
+    </div>
+
+
+
+    @foreach (var combo in Model)
+    {
+        <div class="combo-box border rounded p-4 mb-4 shadow-sm bg-white">
+            <div class="row">
+                <div class="col-md-4 text-center mb-3">
+                    @if (!string.IsNullOrEmpty(combo.ImageUrl))
+                    {
+                        <img src="@combo.ImageUrl" alt="Combo Image" class="img-fluid rounded shadow-sm" />
+                    }
+                    else
+                    {
+                        <div class="bg-light border p-3 rounded">Không có ảnh</div>
+                    }
+                </div>
+                <div class="col-md-8">
+                    <h4 class="text-primary">@combo.PlanDescription <small class="text-muted">(@combo.Bmirange)</small></h4>
+
+                    <p class="mb-1"><strong>💰 Giá:</strong> <span class="text-danger fw-bold">@combo.Price.ToString("N0") VND</span></p>
+
+                    <p class="mb-2">
+                        <strong>📌 Trạng thái:</strong>
+                        @if (combo.IsApproved == "Approved")
+                        {
+                            <span class="badge bg-success">Đang hoạt động</span>
+                        }
+                        else if (combo.IsApproved == "Rejected")
+                        {
+                            <span class="badge bg-secondary">Ngừng hoạt động</span>
+                        }
+                        else if (combo.IsApproved == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                        }
+                    </p>
+
+                    <h6 class="mt-3">📦 Sản phẩm bao gồm:</h6>
+                    <ul class="list-unstyled ps-3">
+                        @foreach (var item in combo.MealPlanProductDetails)
+                        {
+                            <li>• <strong>@item.Product?.Name</strong> – Số lượng: @item.Quantity</li>
+                        }
+                    </ul>
+
+                    <!-- Các nút thao tác -->
+                    <div class="mt-3">
+                        <a asp-area="Nutri" asp-controller="Combo" asp-action="Edit" asp-route-id="@combo.MealPlanDetailId" class="btn btn-warning me-2">
+                            ✏️ Sửa
+                        </a>
+                        <a asp-area="Nutri" asp-controller="Combo" asp-action="Delete" asp-route-id="@combo.MealPlanDetailId" class="btn btn-danger">
+                            🗑️ Xóa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- PHÂN TRANG -->
+    <div class="d-flex justify-content-center mt-4">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link" },
+                UlElementClasses = new[] { "pagination" }
+                })
+    </div>
+</div>

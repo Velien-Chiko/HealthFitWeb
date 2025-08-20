@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to HealthFit</h1>
+    <p>Khám phá các tính năng sức khỏe và tính chỉ số BMI của bạn ngay tại đây!</p>
+</div>
+
+<div class="container my-5">
+    @await Html.PartialAsync("~/Views/BMICalculator/Index.cshtml")
+</div> 

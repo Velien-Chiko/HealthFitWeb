@@ -1,0 +1,199 @@
+﻿@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+@model CartItemVM
+
+<div class="hero-wrap hero-bread" style="background-image: url('@Url.Content("~/images/bg_1.jpg")');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a asp-controller="Home" asp-action="Index">Home</a></span> <span>Cart</span></p>
+                <h1 class="mb-0 bread">My Cart</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <form method="post" asp-action="UpdateCart" id="update-cart-form">
+            <div class="row">
+                <div class="col-md-12 ftco-animate">
+                    <div class="cart-list">
+                        <table class="table">
+                            <thead class="thead-primary">
+                                <tr class="text-center">
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CartItemList != null && Model.CartItemList.Any())
+                                {
+                                    var index = 0;
+                                    foreach (var item in Model.CartItemList)
+                                    {
+                                        <tr class="text-center">
+                                            <td class="product-remove">
+                                                <a asp-action="remove" asp-route-cartId="@item.CartItemId"><span class="ion-ios-close"></span></a>
+                                            </td>
+
+                                            <td class="image-prod">
+                                                <div class="img" style="background-image:url(@item.ImageUrl); width: 80px; height: 80px; background-size: cover;"></div>
+                                            </td>
+
+                                            <td class="product-name">
+                                                <h3>@item.Name</h3>
+                                                <p>@item.Description</p>
+                                            </td>
+
+                                            <td class="price" id="unitprice-@index" data-unitprice="@item.UnitPrice">@item.UnitPrice.ToString("N0") VNĐ</td>
+                                            <td class="quantity">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary btn-lg px-3 py-1"
+                                                                onclick="updateQuantity(@index, -1, @item.MaxQuantity)">
+                                                            <i class="ion-ios-remove"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="number"
+                                                           id="quantity-@index"
+                                                           name="CartItemList[@index].Quantity"
+                                                           class="form-control text-center"
+                                                           value="@item.Quantity"
+                                                           min="1"
+                                                           max="@item.MaxQuantity"
+                                                           step="1"
+                                                           style="font-size:1.2rem;max-width:80px;"
+                                                           oninput="validateQuantity(@index, @item.MaxQuantity); updateSubTotal(@index); updateCartTotal();" />
+                                                    <input type="hidden" name="CartItemList[@index].CartItemId" value="@item.CartItemId" />
+                                                    <div class="input-group-append">
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary btn-lg px-3 py-1"
+                                                                onclick="updateQuantity(@index, 1, @item.MaxQuantity)">
+                                                            <i class="ion-ios-add"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-danger small mt-1" id="qty-error-@index"></div>
+                                            </td>
+                                            <td class="total" id="subtotal-@index">
+                                                @((item.Quantity * item.UnitPrice).ToString("N0")) VNĐ
+                                            </td>
+                                        </tr>
+                                        index++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <div class="alert alert-info mb-0" role="alert">
+                                                Giỏ hàng của bạn chưa có sản phẩm nào. Hãy <a asp-area="Store" asp-controller="Store" asp-action="Index" class="alert-link">mua sắm ngay</a>!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @if (Model.CartItemList != null && Model.CartItemList.Any())
+            {
+                <button type="submit" class="btn btn-warning mt-2">Cập nhật giỏ hàng</button>
+            }
+        </form>
+
+        <div class="row justify-content-end">
+            <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+                <div class="cart-total mb-3">
+                    <h3>Cart Totals</h3>
+                    <hr>
+                    <p class="d-flex total-price">
+                        <span>Total</span>
+                        <span id="cart-total">
+                            @Model.Order.TotalAmount.ToString("N0") VNĐ
+                        </span>
+                    </p>
+                </div>
+                @if (Model.Order.TotalAmount > 0)
+                {
+                    <form method="get" asp-action="Summary">
+                        <button type="submit" class="btn btn-primary py-3 px-4">Proceed to Checkout</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function updateQuantity(index, delta, maxStock) {
+        const qtyInput = document.getElementById("quantity-" + index);
+        let value = parseInt(qtyInput.value) || 1;
+        value = Math.max(1, Math.min(maxStock, value + delta));
+        qtyInput.value = value;
+        validateQuantity(index, maxStock);
+        updateSubTotal(index);
+        updateCartTotal();
+    }
+
+    function validateQuantity(index, maxStock) {
+        const qtyInput = document.getElementById("quantity-" + index);
+        const errorDiv = document.getElementById("qty-error-" + index);
+        let value = qtyInput.value;
+
+        if (!/^\d+$/.test(value) || parseInt(value) < 1 || parseInt(value) > maxStock) {
+            errorDiv.style.display = "block";
+            errorDiv.innerText = `Vui lòng nhập số nguyên từ 1 đến ${maxStock}`;
+        } else {
+            errorDiv.style.display = "none";
+            errorDiv.innerText = "";
+        }
+    }
+
+    function updateSubTotal(index) {
+        const qtyInput = document.getElementById("quantity-" + index);
+        const unitPriceTd = document.getElementById("unitprice-" + index);
+        const subtotalTd = document.getElementById("subtotal-" + index);
+
+        let unitPrice = unitPriceTd.getAttribute("data-unitprice");
+        unitPrice = parseFloat(unitPrice);
+
+        let qty = parseInt(qtyInput.value) || 1;
+        let subtotal = unitPrice * qty;
+
+        subtotalTd.innerText = subtotal.toLocaleString("vi-VN") + " VNĐ";
+    }
+
+    function updateCartTotal() {
+        let total = 0;
+        let index = 0;
+        while (true) {
+            const qtyInput = document.getElementById("quantity-" + index);
+            const unitPriceTd = document.getElementById("unitprice-" + index);
+            if (!qtyInput || !unitPriceTd) break;
+            let qty = parseInt(qtyInput.value) || 1;
+            let unitPrice = parseFloat(unitPriceTd.getAttribute("data-unitprice")) || 0;
+            total += qty * unitPrice;
+            index++;
+        }
+        document.getElementById("cart-total").innerText = total.toLocaleString("vi-VN") + " VNĐ";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let index = 0;
+        while (true) {
+            if (!document.getElementById("quantity-" + index)) break;
+            updateSubTotal(index);
+            index++;
+        }
+        updateCartTotal();
+    });
+</script>

@@ -1,0 +1,38 @@
+@model HealthFit.Models.ViewModels.UserProfileViewModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+<link rel="stylesheet" href="~/css/userprofile.css" />
+
+<div class="userprofile-container">
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span>@TempData["success"]</span>
+        </div>
+    }
+    <h2 class="mb-4">Hồ sơ cá nhân</h2>
+    <div class="profile-info">
+        <p><strong>Họ và tên:</strong> @Model.FullName</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Số điện thoại:</strong> @Model.PhoneNumber</p>
+		<p><strong>Thành phố:</strong> @Model.City</p>
+        <p><strong>Địa chỉ:</strong> @Model.Address</p>
+        <p><strong>Gender:</strong> @{
+            var gender = Model.Gender;
+            string genderDisplay = gender == "Male" ? "Male"
+                : gender == "Female" ? "Female"
+                : gender == "Other" ? "Other"
+                : string.IsNullOrEmpty(gender) ? "Not specified"
+                : gender;
+        }@genderDisplay</p>
+    </div>
+    <div class="profile-actions mt-4">
+        <a asp-action="Edit" class="btn btn-primary">Chỉnh sửa hồ sơ</a>
+        <a asp-action="ChangePassword" class="btn btn-secondary ml-2">Đổi mật khẩu</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

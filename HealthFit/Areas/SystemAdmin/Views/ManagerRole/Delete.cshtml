@@ -1,0 +1,52 @@
+﻿@model dynamic
+@{
+	ViewData["Title"] = "Xóa Người Dùng";
+}
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-8 col-lg-6">
+			<div class="card">
+				<div class="card-header text-center">
+					<h3 class="mb-0">
+						<i class="bi bi-person-x text-danger"></i> @ViewData["Title"]
+					</h3>
+				</div>
+				<div class="card-body">
+
+@* ============================= *@
+@* XÁC NHẬN XÓA NGƯỜI DÙNG *@
+@* Hiển thị thông tin user, cảnh báo, nút xác nhận xóa/quay lại *@
+@* ============================= *@
+
+		<div class="alert alert-danger mb-4">
+			<i class="bi bi-exclamation-triangle-fill"></i>
+			Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác.
+		</div>
+
+		<div class="user-info">
+			<p>
+				<strong><i class="bi bi-envelope"></i> Email:</strong><br />
+				@Model.Email
+			</p>
+			<p>
+				<strong><i class="bi bi-person"></i> Họ và Tên:</strong><br />
+				@(string.IsNullOrEmpty(Model.FullName) ? "(Chưa cập nhật)" : Model.FullName)
+			</p>
+		</div>
+
+		<form asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="Delete" class="d-flex justify-content-center gap-2">
+			<input type="hidden" name="id" value="@Model.Id" />
+			
+			<a asp-area="SystemAdmin" asp-controller="ManagerRole" asp-action="SystemAdmin" class="btn btn-secondary">
+				<i class="bi bi-arrow-left"></i> Quay lại
+			</a>
+			<button type="submit" class="btn btn-danger">
+				<i class="bi bi-trash"></i> Xác nhận xóa
+			</button>
+		</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

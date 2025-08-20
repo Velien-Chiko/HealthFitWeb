@@ -1,0 +1,269 @@
+@model IEnumerable<HealthFit.Models.Order>
+@using HealthFit.Models
+@using HealthFit.Models.Constants
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+    Layout = "~/Areas/Seller/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="/css/seller-custom.css" />
+<div class="container mt-5">
+    <!-- Navigation Menu for Seller -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 rounded">
+        <div class="container-fluid">
+            <span class="navbar-brand fw-bold">Seller Menu</span>
+            <div class="navbar-nav">
+                <a class="nav-link" asp-controller="Seller" asp-action="Dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" asp-controller="Seller" asp-action="EditProfile">
+                    <i class="fas fa-user-edit"></i> Cập nhật thông tin
+                </a>
+                <a class="nav-link" asp-controller="Seller" asp-action="ProductList">
+                    <i class="fas fa-box"></i> Quản lý sản phẩm
+                </a>
+                <a class="nav-link active" asp-controller="Seller" asp-action="OrderList">
+                    <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <h2 class="mb-4 text-center">Quản lý đơn hàng</h2>
+    
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    <!-- Form tìm kiếm, lọc và sắp xếp đơn hàng -->
+<form class="row g-2 align-items-end mb-3 flex-nowrap flex-md-wrap" method="get" asp-action="OrderList" style="overflow-x:auto;" id="orderSearchForm">
+    <div class="col-auto flex-grow-1" style="min-width:200px;">
+        <input type="text" name="search" class="form-control" placeholder="Tìm kiếm theo mã đơn hoặc tên khách hàng..." value="@ViewBag.Search" />
+    </div>
+    <div class="col-auto" style="min-width:160px;">
+        <select name="filter" class="form-select">
+            <option value="">-- Tất cả trạng thái --</option>
+            <option value="Đã Thanh Toán" selected="@(ViewBag.Filter == "Đã Thanh Toán" ? "selected" : null)">Đã thanh toán</option>
+            <option value="Đang giao" selected="@(ViewBag.Filter == "Đang giao" ? "selected" : null)">Đang giao</option>
+            <option value="Completed" selected="@(ViewBag.Filter == "Completed" ? "selected" : null)">Hoàn thành</option>
+            <option value="Đã hủy" selected="@(ViewBag.Filter == "Đã hủy" ? "selected" : null)">Đã hủy</option>
+        </select>
+    </div>
+    <div class="col-auto" style="min-width:140px;">
+        <select name="sort" class="form-select">
+            <option value="" selected="@(string.IsNullOrEmpty(ViewBag.Sort))">-- Sắp xếp --</option>
+            <option value="date_desc" selected="@(ViewBag.Sort == "date_desc")">Ngày mới nhất</option>
+            <option value="date_asc" selected="@(ViewBag.Sort == "date_asc")">Ngày cũ nhất</option>
+            <option value="total_asc" selected="@(ViewBag.Sort == "total_asc")">Tổng tiền tăng dần</option>
+            <option value="total_desc" selected="@(ViewBag.Sort == "total_desc")">Tổng tiền giảm dần</option>
+        </select>
+    </div>
+    <div class="col-auto" style="min-width:150px;">
+        <input type="date" name="fromDate" class="form-control" value="@ViewBag.FromDate" placeholder="Từ ngày" />
+    </div>
+    <div class="col-auto" style="min-width:150px;">
+        <input type="date" name="toDate" class="form-control" value="@ViewBag.ToDate" placeholder="Đến ngày" />
+    </div>
+    <div class="col-auto d-flex gap-2" style="min-width:120px;">
+        <button type="submit" class="btn btn-primary btn-sm seller-search-btn px-3"><i class="fas fa-search"></i> <span class="d-none d-md-inline">Tìm kiếm</span></button>
+        <a class="btn btn-outline-primary btn-sm px-3 ms-1" asp-action="OrderList">Làm mới</a>
+    </div>
+</form>
+    
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Mã đơn hàng</th>
+                <th>Họ tên</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>Email</th>
+                <th>Thành phố</th>
+                <th>Quốc gia</th>
+                <th>Sản phẩm</th>
+                <th>Ngày đặt</th>
+                <th>Trạng thái</th>
+                <th>Tổng tiền</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int stt = 1;
+                foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>@order.OrderId</td>
+                        <td>@order.FullName</td>
+                        <td>@order.PhoneNumber</td>
+                        <td>@order.Address</td>
+                        <td>@order.Email</td>
+                        <td>@order.City</td>
+                        <td>@order.Country</td>
+                        <td>
+                            @if (order.OrderProductDetails != null && order.OrderProductDetails.Any())
+                            {
+                                <div class="small">
+                                    @foreach (var detail in order.OrderProductDetails.Take(2))
+                                    {
+                                        <div class="d-flex align-items-center mb-1">
+                                            @if (!string.IsNullOrEmpty(detail.Product?.ImageUrl))
+                                            {
+                                                <img src="@detail.Product.ImageUrl" alt="@detail.Product.Name" 
+                                                     style="width: 30px; height: 30px; object-fit: cover;" class="rounded me-2" />
+                                            }
+                                            <span>@detail.Product?.Name (@detail.Quantity)</span>
+                                        </div>
+                                    }
+                                    @if (order.OrderProductDetails.Count() > 2)
+                                    {
+                                        <small class="text-muted">+@(order.OrderProductDetails.Count() - 2) sản phẩm khác</small>
+                                    }
+                                </div>
+                            }
+                            else if (order.OrderMealPlanDetails != null && order.OrderMealPlanDetails.Any())
+                            {
+                                <div class="small">
+                                    @foreach (var combo in order.OrderMealPlanDetails)
+                                    {
+                                        <div class="d-flex align-items-center mb-1">
+                                            @if (!string.IsNullOrEmpty(combo.MealPlanDetail?.ImageUrl))
+                                            {
+                                                <img src="@combo.MealPlanDetail.ImageUrl" alt="@combo.MealPlanDetail.PlanDescription"
+                                                     style="width: 30px; height: 30px; object-fit: cover;" class="rounded me-2" />
+                                            }
+                                            <span>Combo: @combo.MealPlanDetail?.PlanDescription (@combo.Quantity)</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Không có sản phẩm</span>
+                            }
+                        </td>
+                        <td>@order.OrderDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @switch (order.Status)
+                            {
+                                case OrderStatusConstants.Confirmed:
+                                    <span class="badge bg-info">@OrderStatusConstants.Confirmed</span>
+                                    break;
+                                case OrderStatusConstants.Shipped:
+                                    <span class="badge bg-primary">@OrderStatusConstants.Shipped</span>
+                                    break;
+                                case OrderStatusConstants.Delivered:
+                                    <span class="badge bg-success">@OrderStatusConstants.Delivered</span>
+                                    break;
+                                case OrderStatusConstants.Cancelled:
+                                    <span class="badge bg-danger">@OrderStatusConstants.Cancelled</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">@order.Status</span>
+                                    break;
+                            }
+                        </td>
+                        <td>@order.TotalAmount.ToString("N0") ₫</td>
+                        <td>
+                            <a class="btn btn-sm btn-info" asp-controller="Seller" asp-action="OrderDetails" asp-route-id="@order.OrderId">
+                                <i class="fas fa-eye"></i> Xem
+                            </a>
+                            @if (order.Status == OrderStatusConstants.Confirmed)
+                            {
+                                <form asp-action="ShipOrder" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn cập nhật trạng thái giao hàng?')">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-shipping-fast"></i> Giao hàng
+                                    </button>
+                                </form>
+                            }
+                            else if (order.Status == OrderStatusConstants.Shipped)
+                            {
+                                <form asp-action="DeliverOrder" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xác nhận đã giao hàng?')">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-check-double"></i> Đã giao
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="13" class="text-center text-muted">
+                        <i class="fas fa-inbox fa-2x mb-2"></i>
+                        <br>Chưa có đơn hàng nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Phân trang danh sách đơn hàng -->
+    @{
+        var pager = ViewBag.Pager as HealthFit.Models.Models.Pager;
+    }
+    @if (pager != null && pager.TotalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                @if (pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="OrderList" asp-route-pg="1" asp-route-search="@ViewBag.Search" asp-route-filter="@ViewBag.Filter" asp-route-sort="@ViewBag.Sort" asp-route-fromDate="@ViewBag.FromDate" asp-route-toDate="@ViewBag.ToDate">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" asp-action="OrderList" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-search="@ViewBag.Search" asp-route-filter="@ViewBag.Filter" asp-route-sort="@ViewBag.Sort" asp-route-fromDate="@ViewBag.FromDate" asp-route-toDate="@ViewBag.ToDate">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+                @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                {
+                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="OrderList" asp-route-pg="@pge" asp-route-search="@ViewBag.Search" asp-route-filter="@ViewBag.Filter" asp-route-sort="@ViewBag.Sort" asp-route-fromDate="@ViewBag.FromDate" asp-route-toDate="@ViewBag.ToDate">@pge</a>
+                    </li>
+                }
+                @if (pager.CurrentPage < pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="OrderList" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-search="@ViewBag.Search" asp-route-filter="@ViewBag.Filter" asp-route-sort="@ViewBag.Sort" asp-route-fromDate="@ViewBag.FromDate" asp-route-toDate="@ViewBag.ToDate">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" asp-action="OrderList" asp-route-pg="@(pager.TotalPages)" asp-route-search="@ViewBag.Search" asp-route-filter="@ViewBag.Filter" asp-route-sort="@ViewBag.Sort" asp-route-fromDate="@ViewBag.FromDate" asp-route-toDate="@ViewBag.ToDate">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div> 
+@section Scripts {
+    <script>
+        document.getElementById('orderSearchForm').addEventListener('submit', function(e) {
+            var fromDate = document.querySelector('input[name="fromDate"]').value;
+            var toDate = document.querySelector('input[name="toDate"]').value;
+            if (fromDate && toDate && toDate < fromDate) {
+                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                e.preventDefault();
+            }
+        });
+    </script>
+} 

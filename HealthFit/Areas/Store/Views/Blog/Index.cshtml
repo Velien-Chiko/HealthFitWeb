@@ -1,0 +1,131 @@
+﻿@model IPagedList<HealthFit.Models.Blog>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Vegefoods - Blog</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Fonts & CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="~/css/magnific-popup.css" />
+    <link rel="stylesheet" href="~/css/aos.css" />
+    <link rel="stylesheet" href="~/css/ionicons.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css" />
+    <link rel="stylesheet" href="~/css/flaticon.css" />
+    <link rel="stylesheet" href="~/css/icomoon.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+        .blog-entry .img {
+            min-height: 200px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-entry:hover .img {
+            transform: scale(1.03);
+        }
+
+        .blog-entry .text {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .meta div {
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <!-- Blog List -->
+                <div class="col-lg-8 ftco-animate">
+                    <h2 class="mb-4 text-success">Danh sách Blog</h2>
+
+                    @foreach (var blog in Model)
+                    {
+                        <div class="blog-entry ftco-animate mb-5 d-flex">
+                            <a asp-area="Store" asp-controller="Blog" asp-action="ReadMore" asp-route-id="@blog.BlogId"
+                               class="img img-2 d-flex justify-content-center align-items-center"
+                               style="background-image: url('@(string.IsNullOrEmpty(blog.ImageUrl) ? "/images/default.jpg" : blog.ImageUrl)'); width: 40%; background-size: cover; border-radius: 10px;">
+                            </a>
+                            <div class="text pl-4" style="width: 60%;">
+                                <h3 class="heading">
+                                    <a asp-area="Store" asp-controller="Blog" asp-action="ReadMore" asp-route-id="@blog.BlogId" class="text-success">
+                                        @blog.Title
+                                    </a>
+                                </h3>
+                                <div class="meta mb-2">
+                                    <div><i class="fa fa-calendar-alt me-1 text-muted"></i> @blog.CreatedDate?.ToString("dd/MM/yyyy")</div>
+                                    <div><i class="fa fa-user me-1 text-muted"></i> @(blog.User?.FullName ?? "Anonymous")</div>
+                                </div>
+                                <p>@(blog.Content.Length > 120 ? blog.Content.Substring(0, 120) + "..." : blog.Content)</p>
+                                <p>
+                                    <a asp-area="Store" asp-controller="Blog" asp-action="ReadMore" asp-route-id="@blog.BlogId" class="btn btn-outline-success btn-sm">
+                                        Đọc thêm <i class="fa fa-arrow-right"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Pagination -->
+                    <div class="text-center mt-4">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", "Blog", new { area = "Store", page }),
+                        new PagedListRenderOptions
+                        {
+                            LiElementClasses = new[] { "page-item" },
+                            PageClasses = new[] { "page-link" },
+                            UlElementClasses = new[] { "pagination justify-content-center" }
+                        })
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4 sidebar">
+                    <div class="sidebar-box">
+                        <h3 class="heading">Thông tin</h3>
+                        <p>Chào mừng bạn đến với trang Blog dinh dưỡng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.easing.1.3.js"></script>
+    <script src="~/js/jquery.waypoints.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/aos.js"></script>
+    <script src="~/js/jquery.animateNumber.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/scrollax.min.js"></script>
+    <script src="~/js/main.js"></script>
+
+</body>
+</html>

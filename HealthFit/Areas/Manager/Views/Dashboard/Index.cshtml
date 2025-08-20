@@ -1,0 +1,171 @@
+﻿@model HealthFit.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Quản lý hệ thống";
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Bảng điều khiển</h1>
+        <div class="text-muted">
+            <i class="fas fa-clock"></i> Cập nhật lần cuối: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+        </div>
+    </div>
+
+    <!-- Welcome Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="text-white mb-2">Chào mừng đến với hệ thống quản lý!</h4>
+                            <p class="text-white-75 mb-0">Quản lý và theo dõi hoạt động của hệ thống một cách hiệu quả</p>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tachometer-alt fa-3x text-white-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+
+<div class="row mb-4">
+    <!-- Tổng sản phẩm chờ duyệt -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Sản phẩm chờ duyệt
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.PendingProducts</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-boxes fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal plan chờ duyệt -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Combo chờ duyệt
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.PendingMealPlans</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-utensils fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doanh thu tháng -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Doanh thu tháng này
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @Model.CurrentMonthRevenue.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    
+
+@section Scripts {
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e3e6f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -22px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px #e3e6f0;
+        }
+
+        .timeline-content {
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4e73df;
+        }
+
+        .timeline-title {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .timeline-text {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            color: #5a5c69;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .system-status .badge {
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+        }
+    </style>
+}
